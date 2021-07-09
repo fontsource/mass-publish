@@ -1,0 +1,5 @@
+{
+  "packages": ["packages/*"],
+  "ignoreChanges": ["*.json", "*.md"],
+  "commitMessage": ["chore: release new versions"]
+}

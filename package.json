@@ -1,0 +1,38 @@
+{
+  "name": "mass-publish",
+  "version": "1.0.0",
+  "description": "A barebones NPM bulk publisher.",
+  "repository": "https://github.com/fontsource/mass-publish.git",
+  "author": "Lotus <declininglotus@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@npmcli/package-json": "^1.0.1",
+    "glob-parent": "^6.0.0",
+    "globby": "^11.0.4",
+    "libnpmpublish": "^4.0.2",
+    "nodegit": "^0.27.0",
+    "package-json": "^7.0.0",
+    "pacote": "^11.3.5",
+    "read-package-json-fast": "^2.0.2",
+    "semver": "^7.3.5",
+    "validate-npm-package-name": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/glob-parent": "^5.1.1",
+    "@types/nodegit": "^0.27.3",
+    "@types/pacote": "^11.1.1",
+    "@types/semver": "^7.3.7",
+    "@types/validate-npm-package-name": "^3.0.3",
+    "eslint": "^7.30.0",
+    "eslint-config-airbnb-typescript": "^12.3.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-jest": "^24.3.6",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-unicorn": "^34.0.1",
+    "jest": "^27.0.6",
+    "prettier": "^2.3.2",
+    "typescript": "^4.3.5"
+  }
+}
