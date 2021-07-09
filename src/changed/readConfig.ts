@@ -1,11 +1,7 @@
 import jsonfile from "jsonfile";
 import path from "path";
 
-interface Config {
-  packages: string[];
-  ignoreChanges?: string[];
-  commitMessage: string;
-}
+import { Config } from "./interfaces/config";
 
 const config = async (): Promise<Config> => {
   const filePath = path.join(process.cwd(), "mass-publish.json");
