@@ -1,6 +1,6 @@
 export interface Config {
   packages: string[];
-  ignoreChanges?: string[];
+  ignoreExtension?: string[];
   commitMessage: string;
   commitFrom: string;
   commitTo?: string;

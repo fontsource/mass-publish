@@ -3,8 +3,11 @@ import { findDiff } from "../../src/changed/findDiff";
 describe("Find diff", () => {
   test("Find test package difference #1 - no change", () => {
     const exampleConfig = {
-      packages: ["tests/changed/fixtures/*"],
-      ignoreChanges: [],
+      packages: [
+        "tests/changed/fixtures/test1/",
+        "tests/changed/fixtures/test2/",
+      ],
+      ignoreExtension: [],
       commitMessage: "chore: release new versions",
       commitFrom: "324088cb56010ce93a595eca2645840203c934b7",
     };
@@ -14,13 +17,20 @@ describe("Find diff", () => {
     });
   });
 
-  /*test("Find test file differences #2", () => {
-    return findDiff().then(files => {
-      expect(files).toBe(["test1"]);
+  test("Find test file differences #2 - all changes", () => {
+    const exampleConfig = {
+      packages: ["tests/changed/fixtures/"],
+      ignoreExtension: [],
+      commitMessage: "chore: release new versions",
+      commitFrom: "c4522ba0b8cb86ea01e680cc739c079ff7df5075",
+    };
+
+    return findDiff(exampleConfig).then(files => {
+      expect(files).toEqual(["test1", "test2", "test3"]);
     });
   });
 
-  test("Find test file differences #3", () => {
+  /* test("Find test file differences #3", () => {
     return findDiff().then(files => {
       expect(files).toBe(["test1", "test2"]);
     });

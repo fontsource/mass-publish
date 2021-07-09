@@ -3,8 +3,8 @@ import { isEqual } from "lodash";
 import { config } from "../../src/changed/readConfig";
 
 const exampleConfig = {
-  packages: ["packages/*"],
-  ignoreChanges: ["*.json", "*.md"],
+  packages: ["packages/"],
+  ignoreExtension: [".json", ".md"],
   commitMessage: "chore: release new versions",
 };
 

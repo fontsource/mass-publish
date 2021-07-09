@@ -5,7 +5,7 @@ import { Config } from "./interfaces/config";
 
 const findDiff = async ({
   packages,
-  ignoreChanges,
+  ignoreExtension = [],
   commitFrom,
   commitTo,
 }: Config): Promise<any> => {
@@ -33,7 +33,46 @@ const findDiff = async ({
     const path = patch.newFile().path();
     pathArray.push(path);
   }
-  return pathArray;
+
+  // Removes all diffs that do not match the configuration
+  const filteredPathArray = pathArray.filter(path => {
+    let match = false;
+
+    for (const packagePath of packages) {
+      // Only allow paths that match config.packages
+      if (path.startsWith(packagePath)) {
+        match = true;
+      }
+
+      // Reject any that match config.ignoreExtension
+      for (const matchingExtension of ignoreExtension) {
+        if (path.endsWith(matchingExtension)) {
+          match = false;
+        }
+      }
+    }
+
+    return match;
+  });
+
+  // Only return changed directories with package.json
+  // tests/fixtures/test1/package.json --> test1
+  const packageJsonPaths = filteredPathArray
+    .filter(path => {
+      if (path.endsWith("package.json")) {
+        return true;
+      }
+    })
+    .map(path => {
+      let newPath = "";
+      for (const packagePath of packages) {
+        newPath = path.replace(packagePath, "");
+      }
+      newPath = newPath.replace("/package.json", "");
+      return newPath;
+    });
+
+  return packageJsonPaths;
 };
 
 export { findDiff };
