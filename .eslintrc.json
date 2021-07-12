@@ -14,10 +14,12 @@
   "plugins": ["@typescript-eslint", "jest", "promise", "unicorn"],
   "extends": [
     "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
     "airbnb-typescript/base",
+    "plugin:@typescript-eslint/recommended",
     "plugin:promise/recommended",
     "plugin:unicorn/recommended",
+    "oclif",
+    "oclif-typescript",
     "plugin:jest/recommended",
     "plugin:prettier/recommended"
   ],
@@ -29,7 +31,6 @@
     "no-console": "off",
     // https://basarat.gitbooks.io/typescript/docs/tips/defaultIsBad.html
     "import/prefer-default-export": "off",
-    "import/no-default-export": "error",
     // Allow most functions to rely on type inference. If the function is exported, then `@typescript-eslint/explicit-module-boundary-types` will ensure it's typed.
     "@typescript-eslint/explicit-function-return-type": "off",
     // Only supported in Node 16.x and up
@@ -41,6 +42,10 @@
     // It's not accurate in the monorepo style
     "import/no-extraneous-dependencies": "off",
     // Acceptable tradeoff
-    "no-restricted-syntax": "off"
+    "no-restricted-syntax": "off",
+    // Affects oclif commands
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": ["off"],
+    "@typescript-eslint/require-await": "off"
   }
 }

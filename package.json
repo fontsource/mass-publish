@@ -2,12 +2,44 @@
   "name": "mass-publish",
   "version": "1.0.0",
   "description": "A barebones NPM bulk publisher.",
+  "bin": {
+    "mass-publish": "./bin/run"
+  },
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "repository": "https://github.com/fontsource/mass-publish.git",
   "author": "Lotus <declininglotus@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "postpack": "rimraf oclif.manifest.json",
+    "posttest": "eslint . --ext .ts --config .eslintrc",
+    "prepack": "rimraf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "command": "./bin/run",
+    "version": "oclif-dev readme && git add README.md"
+  },
+  "oclif": {
+    "commands": "./lib/commands",
+    "bin": "mass-publish",
+    "plugins": [
+      "@oclif/plugin-help"
+    ]
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "files": [
+    "/bin",
+    "/lib",
+    "/npm-shrinkwrap.json",
+    "/oclif.manifest.json"
+  ],
   "dependencies": {
     "@npmcli/package-json": "^1.0.1",
+    "@oclif/command": "^1.8.0",
+    "@oclif/config": "^1.17.0",
+    "@oclif/plugin-help": "^3.2.2",
     "@types/lodash": "^4.14.171",
+    "chalk": "^4.1.1",
     "glob-parent": "^6.0.0",
     "globby": "^11.0.4",
     "jsonfile": "^6.1.0",
@@ -18,9 +50,11 @@
     "pacote": "^11.3.5",
     "read-package-json-fast": "^2.0.2",
     "semver": "^7.3.5",
+    "tslib": "^2.3.0",
     "validate-npm-package-name": "^3.0.0"
   },
   "devDependencies": {
+    "@oclif/dev-cli": "^1.26.0",
     "@types/glob-parent": "^5.1.1",
     "@types/jest": "^26.0.24",
     "@types/jsonfile": "^6.0.1",
@@ -29,8 +63,12 @@
     "@types/pacote": "^11.1.1",
     "@types/semver": "^7.3.7",
     "@types/validate-npm-package-name": "^3.0.3",
+    "@typescript-eslint/eslint-plugin": "^4.28.2",
+    "@typescript-eslint/parser": "^4.28.2",
     "eslint": "^7.30.0",
     "eslint-config-airbnb-typescript": "^12.3.1",
+    "eslint-config-oclif": "^3.1.0",
+    "eslint-config-oclif-typescript": "^0.2.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.23.4",
     "eslint-plugin-jest": "^24.3.6",
@@ -38,8 +76,10 @@
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-unicorn": "^34.0.1",
     "jest": "^27.0.6",
+    "mock-fs": "^5.0.0",
     "oclif": "^1.18.1",
     "prettier": "^2.3.2",
+    "rimraf": "^3.0.2",
     "ts-jest": "^27.0.3",
     "ts-node": "^10.0.0",
     "typescript": "^4.3.5"
