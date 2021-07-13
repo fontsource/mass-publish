@@ -23,10 +23,11 @@ describe("Changed command", () => {
 
   test("find-diff.test.ts #2 - all changes", async () => {
     await Changed.run([
-      "--packages=tests/changed/fixtures/",
-      "--commit-from=c4522ba0b8cb86ea01e680cc739c079ff7df5075",
+      "--packages=src/changed/fixtures/",
+      "--commit-from=d08dd26bd63748ac7961f45d3bf46f7ef42f41d1",
     ]);
     expect(result).toEqual([
+      chalk.blue.bold("Packages changed:"),
       chalk.bold("test1"),
       chalk.bold("test2"),
       chalk.bold("test3"),
