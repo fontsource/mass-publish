@@ -1,4 +1,6 @@
 import chalk from "chalk";
+import path from "path";
+
 import Changed from "./changed";
 
 describe("Changed command", () => {
@@ -18,7 +20,19 @@ describe("Changed command", () => {
       "--packages=src/changed/fixtures/test1/,src/changed/fixtures/test2/",
       "--commit-from=324088cb56010ce93a595eca2645840203c934b7",
     ]);
-    expect(result).toEqual([chalk.green.bold("No publish changes detected.")]);
+    expect(result).toEqual([
+      chalk.red(
+        `${path.join(
+          "src",
+          "changed",
+          "fixtures",
+          "test2",
+          "subdir1",
+          "package.json"
+        )} may have been removed. Not publishing.`
+      ),
+      chalk.green.bold("No publish changes detected."),
+    ]);
   });
 
   test("find-diff.test.ts #2 - all changes", async () => {
@@ -28,6 +42,15 @@ describe("Changed command", () => {
       "--commit-to=7543c880fea5f70fb3ca5ac860be0fda2140e19d",
     ]);
     expect(result).toEqual([
+      chalk.red(
+        `${path.join(
+          "src",
+          "changed",
+          "fixtures",
+          "test3",
+          "package.json"
+        )} may have been removed. Not publishing.`
+      ),
       chalk.blue.bold("Packages changed:"),
       chalk.bold("test1"),
       chalk.bold("test2"),
@@ -63,6 +86,15 @@ describe("Changed command", () => {
       "--commit-to=f1ac53d7aa55ad07fe7df61b5ec810edc49e9fba",
     ]);
     expect(result).toEqual([
+      chalk.red(
+        `${path.join(
+          "src",
+          "changed",
+          "fixtures",
+          "test3",
+          "package.json"
+        )} may have been removed. Not publishing.`
+      ),
       chalk.blue.bold("Packages changed:"),
       chalk.bold("test1"),
       chalk.bold("test2"),

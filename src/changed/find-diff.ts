@@ -1,9 +1,5 @@
-/* eslint-disable consistent-return */
-/* eslint-disable array-callback-return */
-import chalk from "chalk";
 import { Repository } from "nodegit";
 import path from "path";
-import jsonfile from "jsonfile";
 
 import { Config } from "./interfaces/config";
 
@@ -79,25 +75,7 @@ const findDiff = async ({
 
   // Multiple changed files in same dir would produce multiple duplicate dirPaths
   const noDuplicatesDirPaths = [...new Set(dirPaths)];
-
-  const packageJsonNames = noDuplicatesDirPaths
-    .map(dirPath => {
-      const packageJsonPath = path.join(dirPath, "package.json");
-      try {
-        const data = jsonfile.readFileSync(
-          path.join(process.cwd(), packageJsonPath)
-        );
-        return data.name as string;
-      } catch {
-        console.log(
-          chalk.red(`${packageJsonPath} may have been removed. Not publishing.`)
-        );
-      }
-    })
-    // Remove any undefined items from catch method
-    .filter((item): item is string => !!item);
-
-  return packageJsonNames;
+  return noDuplicatesDirPaths;
 };
 
 export { findDiff };

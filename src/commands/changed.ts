@@ -1,8 +1,9 @@
 import { Command, flags } from "@oclif/command";
 import chalk from "chalk";
 
-import { readConfig } from "../changed/read-config";
 import { findDiff } from "../changed/find-diff";
+import { pathToPackage } from "../changed/path-to-package";
+import { readConfig } from "../changed/read-config";
 
 export default class Changed extends Command {
   static description = "Detects what packages have changed since last publish";
@@ -43,12 +44,13 @@ export default class Changed extends Command {
     if (flags["commit-message"]) config.commitMessage = flags["commit-message"];
 
     const diff = await findDiff(config);
-    if (diff.length === 0) {
+    const packageNames = pathToPackage(diff);
+    if (packageNames.length === 0) {
       this.log(chalk.green.bold("No publish changes detected."));
     } else {
       this.log(chalk.blue.bold("Packages changed:"));
-      for (const diffItem of diff) {
-        this.log(diffItem);
+      for (const name of packageNames) {
+        this.log(chalk.bold(name));
       }
     }
   }

@@ -1,3 +1,6 @@
+// Use path module to ensure tests work with different OS'
+import path from "path";
+
 import { findDiff } from "./find-diff";
 
 describe("Find diff", () => {
@@ -7,6 +10,7 @@ describe("Find diff", () => {
       ignoreExtension: [],
       commitMessage: "chore: release new versions",
       commitFrom: "324088cb56010ce93a595eca2645840203c934b7",
+      commitTo: "9b6fc2119d093ae5605f8725c6d7a70e9be291b1",
     };
 
     return findDiff(exampleConfig).then(files => {
@@ -24,7 +28,11 @@ describe("Find diff", () => {
     };
 
     return findDiff(exampleConfig).then(files => {
-      return expect(files).toEqual(["test1", "test2"]);
+      return expect(files).toEqual([
+        path.join("src", "changed", "fixtures", "test1"),
+        path.join("src", "changed", "fixtures", "test2"),
+        path.join("src", "changed", "fixtures", "test3"),
+      ]);
     });
   });
 
@@ -38,7 +46,9 @@ describe("Find diff", () => {
     };
 
     return findDiff(exampleConfig).then(files => {
-      return expect(files).toEqual(["test2"]);
+      return expect(files).toEqual([
+        path.join("src", "changed", "fixtures", "test2"),
+      ]);
     });
   });
 
@@ -66,7 +76,11 @@ describe("Find diff", () => {
     };
 
     return findDiff(exampleConfig).then(files => {
-      return expect(files).toEqual(["test1", "test2"]);
+      return expect(files).toEqual([
+        path.join("src", "changed", "fixtures", "test1"),
+        path.join("src", "changed", "fixtures", "test2"),
+        path.join("src", "changed", "fixtures", "test3"),
+      ]);
     });
   });
 });
