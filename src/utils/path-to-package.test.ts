@@ -13,7 +13,7 @@ describe("Path to package", () => {
     });
 
     const names = pathToPackage([path.join("src", "test")]);
-    expect(names).toEqual(["Test Package"]);
+    expect(names[0].name).toEqual("Test Package");
   });
 
   test("Unsuccessful read", () => {

@@ -44,13 +44,13 @@ export default class Changed extends Command {
     if (flags["commit-message"]) config.commitMessage = flags["commit-message"];
 
     const diff = await findDiff(config);
-    const packageNames = pathToPackage(diff);
-    if (packageNames.length === 0) {
+    const packageJsons = pathToPackage(diff);
+    if (packageJsons.length === 0) {
       this.log(chalk.green.bold("No publish changes detected."));
     } else {
       this.log(chalk.blue.bold("Packages changed:"));
-      for (const name of packageNames) {
-        this.log(chalk.bold(name));
+      for (const packageJson of packageJsons) {
+        this.log(chalk.bold(packageJson.name));
       }
     }
   }
