@@ -2,7 +2,7 @@ import { Command, flags } from "@oclif/command";
 import chalk from "chalk";
 
 import { findDiff } from "../changed/find-diff";
-import { pathToPackage } from "../changed/path-to-package";
+import { pathToPackage } from "../utils/path-to-package";
 import { readConfig } from "../changed/read-config";
 
 export default class Changed extends Command {
