@@ -24,7 +24,7 @@ describe("Find diff", () => {
     };
 
     return findDiff(exampleConfig).then(files => {
-      return expect(files).toEqual(["test1", "test2", "test3"]);
+      return expect(files).toEqual(["test1", "test2"]);
     });
   });
 
@@ -34,6 +34,7 @@ describe("Find diff", () => {
       ignoreExtension: [],
       commitMessage: "chore: release new versions",
       commitFrom: "7543c880fea5f70fb3ca5ac860be0fda2140e19d",
+      commitTo: "5059b64905315d7fdc2dcdfcdee51d052945ddf2",
     };
 
     return findDiff(exampleConfig).then(files => {
@@ -47,6 +48,7 @@ describe("Find diff", () => {
       ignoreExtension: [".ts"],
       commitMessage: "chore: release new versions",
       commitFrom: "7543c880fea5f70fb3ca5ac860be0fda2140e19d",
+      commitTo: "5059b64905315d7fdc2dcdfcdee51d052945ddf2",
     };
 
     return findDiff(exampleConfig).then(files => {
@@ -54,25 +56,13 @@ describe("Find diff", () => {
     });
   });
 
-  test("Find test package differences #5 - multi packages dir 1 and 2", () => {
-    const exampleConfig = {
-      packages: ["src/changed/fixtures/test1/", "src/changed/fixtures/test2/"],
-      ignoreExtension: [],
-      commitMessage: "chore: release new versions",
-      commitFrom: "5059b64905315d7fdc2dcdfcdee51d052945ddf2",
-    };
-
-    return findDiff(exampleConfig).then(files => {
-      return expect(files).toEqual(["test1", "test2"]);
-    });
-  });
-
-  test("Find test package differences #6 - test 3 remove", () => {
+  test("Find test package differences #5 - test 3 remove", () => {
     const exampleConfig = {
       packages: ["src/changed/fixtures/"],
       ignoreExtension: [],
       commitMessage: "chore: release new versions",
       commitFrom: "5059b64905315d7fdc2dcdfcdee51d052945ddf2",
+      commitTo: "f1ac53d7aa55ad07fe7df61b5ec810edc49e9fba",
     };
 
     return findDiff(exampleConfig).then(files => {
