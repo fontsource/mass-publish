@@ -4,8 +4,6 @@ A barebones bulk NPM publisher.
 
 ## How It Works
 
-1. Use Nodegit to compare the last known mass-publish commit (or custom commit) with current to find differences.
-2. Pull latest versions from the NPM registry and bump package.json in the specified range.
-3. Pack and publish all packages.
-
-git diff 136545a8c7a59c170249a46673efedb9c2627c1d --name-only -- packages/
+1. Use Nodegit to compare the last known mass-publish commit (or custom hash) with the latest commits and determine the changes from the diff.
+2. Bump packages and validate they are publishable by comparing versions on the NPM registry using package-json.
+3. Use pacote and libnpmpublish to pack and publish the packages using an async queue.
