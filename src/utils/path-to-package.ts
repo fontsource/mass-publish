@@ -3,12 +3,10 @@
 import chalk from "chalk";
 import jsonfile from "jsonfile";
 import path from "path";
-import { format } from "util";
 
-interface PackageJson {
-  name: string;
-  version: string;
-}
+import log from "./log";
+
+import { PackageJson } from "./interfaces/package-json";
 
 const pathToPackage = (dirArray: string[]): PackageJson[] => {
   const packageJsons = dirArray
@@ -20,12 +18,8 @@ const pathToPackage = (dirArray: string[]): PackageJson[] => {
         );
         return data;
       } catch {
-        process.stdout.write(
-          `${format(
-            chalk.red(
-              `${packageJsonPath} may have been removed. Not publishing.`
-            )
-          )}\n`
+        log(
+          chalk.red(`${packageJsonPath} may have been removed. Not publishing.`)
         );
       }
     })
