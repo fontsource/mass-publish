@@ -1,1 +1,0 @@
-const bump = async diff => {};

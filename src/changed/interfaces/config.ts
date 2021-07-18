@@ -4,4 +4,7 @@ export interface Config {
   commitMessage: string;
   commitFrom: string;
   commitTo?: string;
+  noVerify?: boolean;
+  autoBump?: boolean;
+  yes?: boolean;
 }

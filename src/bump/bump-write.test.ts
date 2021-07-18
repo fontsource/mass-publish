@@ -1,0 +1,25 @@
+import jsonfile from "jsonfile";
+
+import { bumpWrite } from "./bump-write";
+
+import { BumpObject } from "./interfaces/bump-object";
+
+describe("Bump write function", () => {
+  test("Should not throw", async () => {
+    jest.spyOn(jsonfile, "writeFile").mockResolvedValue();
+
+    const bumpList: BumpObject[] = [
+      {
+        packageFile: { name: "test-package", version: "1.0.0" },
+        packagePath: "src/publish/fixtures/",
+        bumpedVersion: "1.1.0",
+      },
+      {
+        packageFile: { name: "test-package2", version: "1.1.0" },
+        packagePath: "src/publish/fixtures/",
+        bumpedVersion: "1.2.0",
+      },
+    ];
+    await expect(bumpWrite(bumpList)).resolves.not.toThrow();
+  });
+});
