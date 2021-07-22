@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import latestVersion from "latest-version";
+import * as latestVersion from "./re-export";
 
 import { bumpCheck } from "./bump-check";
 
@@ -18,7 +18,7 @@ describe("Bump check", () => {
   afterEach(() => jest.restoreAllMocks());
 
   test("No updates needed", async () => {
-    jest.spyOn(latestVersion, "default").mockResolvedValue("1.0.0");
+    jest.spyOn(latestVersion, "latestVersion").mockResolvedValue("1.0.0");
 
     const validList: BumpObject[] = [
       {
@@ -33,7 +33,7 @@ describe("Bump check", () => {
   });
 
   test("Updates needed", async () => {
-    jest.spyOn(latestVersion, "default").mockResolvedValue("1.0.1");
+    jest.spyOn(latestVersion, "latestVersion").mockResolvedValue("1.0.1");
 
     const bumpList: BumpObject[] = [
       {

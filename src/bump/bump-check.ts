@@ -1,7 +1,7 @@
 import chalk from "chalk";
-import latestVersion from "latest-version";
 import PQueue from "p-queue";
 import semver from "semver";
+import { latestVersion } from "./re-export";
 
 import { bumpValue } from "./bump-value";
 import log from "../utils/log";
