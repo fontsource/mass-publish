@@ -3,6 +3,8 @@ import path from "path";
 
 import Changed from "./changed";
 
+jest.setTimeout(50_000);
+
 describe("Changed command", () => {
   let result: any;
 

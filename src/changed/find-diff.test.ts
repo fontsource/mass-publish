@@ -3,6 +3,8 @@ import path from "path";
 
 import { findDiff } from "./find-diff";
 
+jest.setTimeout(50_000);
+
 describe("Find diff", () => {
   test("Find test package difference #1 - no change", () => {
     const exampleConfig = {

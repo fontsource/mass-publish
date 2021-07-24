@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import PQueue from "p-queue";
 import semver from "semver";
-import { latestVersion } from "./re-export";
+import latestVersion from "latest-version";
 
 import { bumpValue } from "./bump-value";
 import log from "../utils/log";
@@ -16,7 +16,7 @@ const validate = async (item: BumpObject) => {
   try {
     // Get latest version from NPM registry and compare if bumped version is greater than NPM
     npmVersion = await latestVersion(item.packageFile.name);
-    if (semver.gt(item.bumpedVersion, npmVersion)) {
+    if (semver.gt(item.bumpedVersion as string, npmVersion)) {
       return item;
     }
   } catch {
@@ -28,6 +28,11 @@ const validate = async (item: BumpObject) => {
   const newItem = item;
   const newVersion = bumpValue(npmVersion, "patch");
   if (newVersion) {
+    log(
+      chalk.red(
+        `${newItem.packageFile.name} version mismatch. NPM version ${npmVersion}. Bump value ${item.bumpedVersion}. Auto-bumping...`
+      )
+    );
     newItem.bumpedVersion = newVersion;
     return newItem;
   }

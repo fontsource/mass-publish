@@ -1,9 +1,12 @@
 import chalk from "chalk";
-import * as latestVersion from "./re-export";
+import latestVersion from "latest-version";
+import { mocked } from "ts-jest/utils";
 
 import { bumpCheck } from "./bump-check";
 
 import { BumpObject } from "./interfaces/bump-object";
+
+jest.mock("latest-version");
 
 describe("Bump check", () => {
   let results: any;
@@ -18,7 +21,8 @@ describe("Bump check", () => {
   afterEach(() => jest.restoreAllMocks());
 
   test("No updates needed", async () => {
-    jest.spyOn(latestVersion, "latestVersion").mockResolvedValue("1.0.0");
+    const mockedLatestVersion = mocked(latestVersion, false);
+    mockedLatestVersion.mockResolvedValue("1.0.0");
 
     const validList: BumpObject[] = [
       {
@@ -33,7 +37,8 @@ describe("Bump check", () => {
   });
 
   test("Updates needed", async () => {
-    jest.spyOn(latestVersion, "latestVersion").mockResolvedValue("1.0.1");
+    const mockedLatestVersion = mocked(latestVersion, false);
+    mockedLatestVersion.mockResolvedValue("1.0.1");
 
     const bumpList: BumpObject[] = [
       {
@@ -52,10 +57,10 @@ describe("Bump check", () => {
 
     const checkedList = await bumpCheck(bumpList);
     expect(checkedList).toEqual(validList);
-    expect(results).toEqual(
+    expect(results).toEqual([
       chalk.red(
         "test-1 version mismatch. NPM version 1.0.1. Bump value 1.0.1. Auto-bumping..."
-      )
-    );
+      ),
+    ]);
   });
 });

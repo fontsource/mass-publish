@@ -15,7 +15,8 @@
     "posttest": "eslint . --ext .ts --config .eslintrc",
     "prepack": "rimraf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
     "command": "./bin/run",
-    "version": "oclif-dev readme && git add README.md"
+    "version": "oclif-dev readme && git add README.md",
+    "test": "jest"
   },
   "oclif": {
     "commands": "./lib/commands",
@@ -53,10 +54,10 @@
     "@oclif/dev-cli": "^1.26.0",
     "@types/jest": "^26.0.24",
     "@types/jsonfile": "^6.0.1",
-    "@types/node": "^16.4.0",
+    "@types/node": "^16.4.1",
     "@types/nodegit": "^0.27.3",
     "@types/pacote": "^11.1.1",
-    "@types/semver": "^7.3.7",
+    "@types/semver": "^7.3.8",
     "@typescript-eslint/eslint-plugin": "^4.28.4",
     "@typescript-eslint/parser": "^4.28.4",
     "eslint": "^7.31.0",

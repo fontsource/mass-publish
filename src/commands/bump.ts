@@ -1,9 +1,11 @@
+/* eslint-disable complexity */
 import { Command, flags } from "@oclif/command";
 import { cli } from "cli-ux";
-
 import chalk from "chalk";
-import { readConfig } from "../changed/read-config";
-import { findDiff } from "../changed/find-diff";
+import semver from "semver";
+
+import { readConfig, findDiff } from "../changed/changed";
+import { bumpCheck, createBumpObject, bumpWrite } from "../bump/bump";
 
 export default class Bump extends Command {
   static description = "Bumps package versions";
@@ -34,6 +36,14 @@ export default class Bump extends Command {
 
     // Args
     const bumpArg = args.version;
+    if (
+      bumpArg !== "patch" ||
+      bumpArg !== "minor" ||
+      bumpArg !== "major" ||
+      semver.valid(bumpArg)
+    ) {
+      throw new Error("Incorrect bump argument .");
+    }
 
     // Flags
     let verify = true || config.noVerify;
@@ -46,17 +56,22 @@ export default class Bump extends Command {
     let skipPrompt = false || config.yes;
     if (flags.yes) skipPrompt = true;
 
-    /* const bumpedFiles = await bumpList(diff, bumpArg, verify);
-    if (bumpedFiles) {
-      if (skipPrompt) {
-        await bumpPackages(bumpedFiles);
-      } else {
-        const input = await cli.confirm(`Bump ${bumpedFiles.length} packages?`);
-        if (input) {
-          await bumpPackages(bumpedFiles);
-          cli.log(chalk.green.bold(`Packages bumped!`));
-        }
+    cli.action.start("Checking packages...");
+    const bumpObjects = await createBumpObject(diff, bumpArg);
+    const checkedObjects = await bumpCheck(bumpObjects);
+    cli.action.stop("Done");
+
+    if (!skipPrompt) {
+      const input = await cli.confirm(
+        `Bump ${checkedObjects.length} packages?`
+      );
+      if (!input) {
+        throw new Error("Bump cancelled.");
       }
-    } */
+    }
+
+    cli.action.start("Writing updates...");
+    await bumpWrite(checkedObjects);
+    cli.action.stop("Done");
   }
 }
