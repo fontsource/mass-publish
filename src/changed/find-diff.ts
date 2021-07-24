@@ -1,42 +1,69 @@
-import { Repository } from "nodegit";
+/* eslint-disable complexity */
+/* eslint-disable new-cap */
+import fs from "fs";
+import { walk, TREE } from "isomorphic-git";
+
 import path from "path";
 
 import { Config } from "./interfaces/config";
+import { GitWalk } from "./interfaces/git-walk";
 
 const findDiff = async ({
   packages,
   ignoreExtension = [],
   commitFrom,
-  commitTo,
+  commitTo = "HEAD",
 }: Config): Promise<string[]> => {
-  const repo = await Repository.open(path.resolve(process.cwd()));
+  // Diffs the two commmits
+  const files: GitWalk[] = await walk({
+    fs,
+    dir: process.cwd(),
+    trees: [TREE({ ref: commitFrom }), TREE({ ref: commitTo })],
+    async map(filepath, [A, B]) {
+      // ignore directories
+      if (filepath === ".") {
+        return;
+      }
+      if (
+        (A && (await A.type())) === "tree" ||
+        (B && (await B.type()) === "tree")
+      ) {
+        return;
+      }
 
-  // Compare commit from
-  const from = await repo.getCommit(commitFrom);
-  const fromTree = await from.getTree();
+      // generate ids
+      const Aoid = A ? await A.oid() : undefined;
+      const Boid = B ? await B.oid() : undefined;
 
-  // Compare commit to
-  let commitToParam = commitTo;
-  if (commitToParam === undefined) {
-    commitToParam = await (await repo.getHeadCommit()).sha();
-  }
+      // determine modification type
+      let type = "equal";
+      if (Aoid !== Boid) {
+        type = "modify";
+      }
+      if (Aoid === undefined) {
+        type = "add";
+      }
+      if (Boid === undefined) {
+        type = "remove";
+      }
+      if (Aoid === undefined && Boid === undefined) {
+        throw new Error(`Git walk error: ${A} ${B}`);
+      }
 
-  const to = await repo.getCommit(commitToParam);
-  const toTree = await to.getTree();
+      // eslint-disable-next-line consistent-return
+      return {
+        path: `${filepath}`,
+        type,
+      };
+    },
+  });
 
-  // Compare both Git trees to and from
-  const diff = await toTree.diff(fromTree);
-  const patches = await diff.patches();
-
-  const pathArray = [];
-
-  for (const patch of patches) {
-    const path = patch.newFile().path();
-    pathArray.push(path);
-  }
+  const filteredFiles = files
+    .filter(item => item.type !== "equal")
+    .map(item => item.path);
 
   // Removes all diffs that do not match the configuration
-  const filteredPathArray = pathArray.filter(path => {
+  const filteredPaths = filteredFiles.filter(path => {
     let match = false;
 
     for (const packagePath of packages) {
@@ -57,7 +84,7 @@ const findDiff = async ({
   });
 
   // Return package.json names
-  const dirPaths = filteredPathArray
+  const dirPaths = filteredPaths
     // Remove filenames and only show dirs
     .map(filePath => path.dirname(filePath))
     // Remove any files that are included in the packages dir but not in a separate subdir
