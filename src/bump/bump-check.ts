@@ -12,7 +12,6 @@ const queue = new PQueue({ concurrency: 6 });
 
 const validate = async (item: BumpObject) => {
   let npmVersion: string | boolean;
-
   try {
     // Get latest version from NPM registry and compare if bumped version is greater than NPM
     npmVersion = await latestVersion(item.packageFile.name);

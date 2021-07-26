@@ -4,7 +4,6 @@ import path from "path";
 import { mocked } from "ts-jest/utils";
 
 import Bump from "./bump";
-import { readConfig } from "../changed/read-config";
 import { bumpWrite } from "../bump/bump-write";
 
 import {
@@ -14,6 +13,7 @@ import {
   exampleConfig4,
   exampleConfig5,
 } from "../utils/helpers/test-configs";
+import { mockConfig } from "../utils/helpers/mock-config";
 
 jest.mock("../changed/read-config.ts");
 jest.mock("../bump/bump-write.ts");
@@ -51,8 +51,7 @@ describe("Bump command", () => {
   afterEach(() => jest.restoreAllMocks());
 
   test("success #1 - No updates", async () => {
-    const mockedConfig = mocked(readConfig);
-    mockedConfig.mockResolvedValue(exampleConfig1);
+    mockConfig(exampleConfig1);
 
     await expect(Bump.run(["patch"])).rejects.toThrow(
       "No packages to update found."
@@ -64,8 +63,7 @@ describe("Bump command", () => {
   });
 
   test("success #2 - All changes", async () => {
-    const mockedConfig = mocked(readConfig);
-    mockedConfig.mockResolvedValue(exampleConfig2);
+    mockConfig(exampleConfig2);
 
     await expect(Bump.run(["minor"])).resolves.not.toThrow();
 
@@ -91,8 +89,7 @@ describe("Bump command", () => {
   });
 
   test("success #3 - Test 2 multi subdir", async () => {
-    const mockedConfig = mocked(readConfig);
-    mockedConfig.mockResolvedValue(exampleConfig3);
+    mockConfig(exampleConfig3);
 
     await expect(Bump.run(["major"])).resolves.not.toThrow();
 
@@ -108,8 +105,7 @@ describe("Bump command", () => {
   });
 
   test("success #4 - Ignore ts files", async () => {
-    const mockedConfig = mocked(readConfig);
-    mockedConfig.mockResolvedValue(exampleConfig4);
+    mockConfig(exampleConfig4);
 
     await expect(Bump.run(["major"])).rejects.toThrow(
       "No packages to update found."
@@ -117,8 +113,7 @@ describe("Bump command", () => {
   });
 
   test("success #5 - test 3 remove, 2 package change", async () => {
-    const mockedConfig = mocked(readConfig);
-    mockedConfig.mockResolvedValue(exampleConfig5);
+    mockConfig(exampleConfig5);
 
     await expect(Bump.run(["5.12.35"])).resolves.not.toThrow();
 
@@ -141,5 +136,18 @@ describe("Bump command", () => {
       chalk.blue("Writing updates..."),
       chalk.green("Done."),
     ]);
+  });
+
+  test("Incorrect bump arg", async () => {
+    mockConfig(exampleConfig1);
+
+    await expect(Bump.run(["a.b.c"])).rejects.toThrow(
+      "Incorrect bump argument."
+    );
+  });
+
+  test("No verify flag", async () => {
+    mockConfig(exampleConfig1);
+    // await expect(Bump.run(["1.1.1", "--no-verify"]));
   });
 });

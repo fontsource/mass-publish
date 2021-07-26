@@ -45,9 +45,9 @@ export default class Bump extends Command {
     }
 
     // Flags
-    let verify = true;
+    let noVerify = false;
     if (flags["no-verify"]) {
-      verify = false;
+      noVerify = true;
     }
 
     let autoBump = false;
@@ -63,7 +63,12 @@ export default class Bump extends Command {
 
     cli.action.start(chalk.bold.blue("Checking packages..."));
     const bumpObjects = await createBumpObject(diff, bumpArg);
-    const checkedObjects = await bumpCheck(bumpObjects);
+
+    // Skip checking if no verify flag
+    const checkedObjects = noVerify
+      ? bumpObjects
+      : await bumpCheck(bumpObjects);
+
     if (checkedObjects.length === 0) {
       throw new CLIError("No packages to update found.");
     }
