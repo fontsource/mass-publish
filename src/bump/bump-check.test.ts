@@ -75,7 +75,7 @@ describe("Bump check", () => {
     const checkedList = await bumpCheck(bumpList);
     expect(checkedList).toEqual(validList);
     expect(results).toEqual([
-      "test-1 version mismatch. Failed to bump. Not publishing.",
+      chalk.red("test-1 version mismatch. Failed to bump. Not publishing."),
     ]);
   });
 

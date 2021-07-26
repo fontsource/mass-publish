@@ -5,6 +5,7 @@ import { mocked } from "ts-jest/utils";
 
 import Bump from "./bump";
 import { bumpWrite } from "../bump/bump-write";
+import * as check from "../bump/bump-check";
 
 import {
   exampleConfig1,
@@ -115,7 +116,9 @@ describe("Bump command", () => {
   test("success #5 - test 3 remove, 2 package change", async () => {
     mockConfig(exampleConfig5);
 
+    const bumpCheck = jest.spyOn(check, "bumpCheck");
     await expect(Bump.run(["5.12.35"])).resolves.not.toThrow();
+    expect(bumpCheck).toBeCalledTimes(1);
 
     expect(results).toEqual([
       chalk.bold.blue("Checking packages..."),
@@ -147,7 +150,44 @@ describe("Bump command", () => {
   });
 
   test("No verify flag", async () => {
-    mockConfig(exampleConfig1);
-    // await expect(Bump.run(["1.1.1", "--no-verify"]));
+    mockConfig(exampleConfig3);
+    const bumpCheck = jest.spyOn(check, "bumpCheck");
+    await expect(Bump.run(["1.1.1", "--no-verify"])).resolves.not.toThrow();
+
+    expect(bumpCheck).toBeCalledTimes(0);
+  });
+
+  test("Autobump flag", async () => {
+    mockConfig(exampleConfig3);
+    const bumpCheck = jest.spyOn(check, "bumpCheck");
+
+    await expect(Bump.run(["patch", "--auto-bump"])).resolves.not.toThrow();
+    expect(bumpCheck).toHaveBeenCalledWith(expect.anything(), true);
+  });
+
+  test("Yes flag", async () => {
+    mockConfig(exampleConfig3);
+
+    await expect(Bump.run(["minor", "--yes"])).resolves.not.toThrow();
+
+    expect(results).toEqual([
+      chalk.bold.blue("Checking packages..."),
+      chalk.bold.green("Done."),
+      chalk.bold.blue("Changed packages:"),
+      chalk.magenta("test2: 1.1.0 --> 1.2.0"),
+      chalk.blue("Writing updates..."),
+      chalk.green("Done."),
+    ]);
+  });
+
+  test("Not confirm bump packages", async () => {
+    mockConfig(exampleConfig3);
+
+    jest.spyOn(cli, "confirm").mockImplementation(val => {
+      results.push(String(val).trim());
+      return Promise.resolve(false);
+    });
+
+    await expect(Bump.run(["major"])).rejects.toThrow("Bump cancelled.");
   });
 });
