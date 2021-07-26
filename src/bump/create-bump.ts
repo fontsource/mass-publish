@@ -1,8 +1,7 @@
 import { bumpValue } from "./bump-value";
-import { pathToPackage } from "../utils/path-to-package";
+import { pathToPackage, isPackageJson } from "../utils/utils";
 
-import { BumpObject } from "./interfaces/bump-object";
-import { isPackageJson } from "../utils/interfaces/is-package-json";
+import type { BumpObject } from "./bump";
 
 const createBumpObject = (diff: string[], bumpArg: string): BumpObject[] => {
   const bumpObjectArr: BumpObject[] = [];

@@ -1,12 +1,10 @@
 import { Command, flags } from "@oclif/command";
+import { CLIError } from "@oclif/errors";
 import chalk from "chalk";
 import { cli } from "cli-ux";
 
-import { CLIError } from "@oclif/errors";
-import { findDiff } from "../changed/find-diff";
-import { pathToPackage } from "../utils/path-to-package";
-import { readConfig } from "../changed/read-config";
-import { isPackageJson } from "../utils/interfaces/is-package-json";
+import { readConfig, findDiff } from "../changed/changed";
+import { pathToPackage, isPackageJson } from "../utils/utils";
 
 export default class Changed extends Command {
   static description = "Detects what packages have changed since last publish";

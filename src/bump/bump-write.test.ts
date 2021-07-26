@@ -2,7 +2,7 @@ import jsonfile from "jsonfile";
 
 import { bumpWrite } from "./bump-write";
 
-import { BumpObject } from "./interfaces/bump-object";
+import type { BumpObject } from "./bump";
 
 describe("Bump write function", () => {
   test("Should not throw", async () => {

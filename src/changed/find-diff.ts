@@ -5,8 +5,7 @@ import { walk, TREE } from "isomorphic-git";
 
 import path from "path";
 
-import { Config } from "./interfaces/config";
-import { GitWalk } from "./interfaces/git-walk";
+import type { Config, GitWalk } from "./changed";
 
 const findDiff = async ({
   packages,

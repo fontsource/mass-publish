@@ -4,13 +4,13 @@ import semver from "semver";
 import latestVersion from "latest-version";
 
 import { bumpValue } from "./bump-value";
-import log from "../utils/log";
+import { log } from "../utils/utils";
 
-import { BumpObject } from "./interfaces/bump-object";
+import type { BumpObject } from "./bump";
 
-const queue = new PQueue({ concurrency: 6 });
+const queue = new PQueue({ concurrency: 12 });
 
-const validate = async (item: BumpObject) => {
+const validate = async (item: BumpObject, autoBump: boolean) => {
   let npmVersion: string | boolean;
   try {
     // Get latest version from NPM registry and compare if bumped version is greater than NPM
@@ -25,15 +25,17 @@ const validate = async (item: BumpObject) => {
 
   // If bumped value is not greater than NPM, auto bump with patch
   const newItem = item;
-  const newVersion = bumpValue(npmVersion, "patch");
-  if (newVersion) {
-    log(
-      chalk.red(
-        `${newItem.packageFile.name} version mismatch. NPM version ${npmVersion}. Bump value ${item.bumpedVersion}. Auto-bumping...`
-      )
-    );
-    newItem.bumpedVersion = newVersion;
-    return newItem;
+  if (autoBump) {
+    const newVersion = bumpValue(npmVersion, "patch");
+    if (newVersion) {
+      log(
+        chalk.red(
+          `${newItem.packageFile.name} version mismatch. NPM version ${npmVersion}. Bump value ${item.bumpedVersion}. Auto-bumping...`
+        )
+      );
+      newItem.bumpedVersion = newVersion;
+      return newItem;
+    }
   }
 
   // If failed to bump again, will not publish
@@ -46,11 +48,14 @@ const validate = async (item: BumpObject) => {
   return newItem;
 };
 
-const bumpCheck = async (bumpList: BumpObject[]): Promise<BumpObject[]> => {
+const bumpCheck = async (
+  bumpList: BumpObject[],
+  autoBump = false
+): Promise<BumpObject[]> => {
   const checkedList: Promise<BumpObject>[] = [];
 
   for (const item of bumpList) {
-    const validatedItem = queue.add(() => validate(item));
+    const validatedItem = queue.add(() => validate(item, autoBump));
     checkedList.push(validatedItem);
   }
 

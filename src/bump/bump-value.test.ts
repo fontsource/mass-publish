@@ -21,8 +21,13 @@ describe("Bump Value", () => {
     expect(newVersion).toBe("2.5.1");
   });
 
-  test("False", () => {
+  test("False input version", () => {
     const newVersion = bumpValue("a.b.c", "major");
+    expect(newVersion).toBeFalsy();
+  });
+
+  test("False bump arg", () => {
+    const newVersion = bumpValue("1.0.0", "test");
     expect(newVersion).toBeFalsy();
   });
 });

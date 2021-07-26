@@ -67,7 +67,7 @@ export default class Bump extends Command {
     // Skip checking if no verify flag
     const checkedObjects = noVerify
       ? bumpObjects
-      : await bumpCheck(bumpObjects);
+      : await bumpCheck(bumpObjects, autoBump);
 
     if (checkedObjects.length === 0) {
       throw new CLIError("No packages to update found.");

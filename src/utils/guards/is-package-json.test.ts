@@ -1,5 +1,5 @@
 import { isPackageJson } from "./is-package-json";
-import { PackageJson, Removed } from "./package-json";
+import { PackageJson, Removed } from "../interfaces/package-json";
 
 describe("Is package json type guard", () => {
   test("PackageJson", () => {

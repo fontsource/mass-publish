@@ -7,7 +7,7 @@ import log from "../utils/log";
 
 const writeUpdate = async (item: BumpObject) => {
   const newPackageFile = item.packageFile;
-  if (item.bumpedVersion) {
+  if (item.bumpedVersion && !item.failedValidation) {
     newPackageFile.version = item.bumpedVersion;
 
     await jsonfile.writeFile(
@@ -17,7 +17,7 @@ const writeUpdate = async (item: BumpObject) => {
   } else {
     log(
       chalk.red(
-        `Did not write ${item.packageFile.name} due to failed bumpedVersion.`
+        `Did not write ${item.packageFile.name} due to failed bump validation.`
       )
     );
   }
