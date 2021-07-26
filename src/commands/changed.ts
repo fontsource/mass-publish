@@ -2,6 +2,7 @@ import { Command, flags } from "@oclif/command";
 import chalk from "chalk";
 import { cli } from "cli-ux";
 
+import { CLIError } from "@oclif/errors";
 import { findDiff } from "../changed/find-diff";
 import { pathToPackage } from "../utils/path-to-package";
 import { readConfig } from "../changed/read-config";
@@ -22,8 +23,6 @@ export default class Changed extends Command {
     packages: flags.string({
       description: "Directories for packages to be checked",
     }),
-    // Override commit message --commit-message=
-    "commit-message": flags.string({ description: "Add commit message" }),
   };
 
   async run(): Promise<void> {
@@ -48,9 +47,6 @@ export default class Changed extends Command {
       const array = flags.packages.split(",");
       config.packages = array;
     }
-    if (flags["commit-message"]) {
-      config.commitMessage = flags["commit-message"];
-    }
 
     const diff = await findDiff(config);
 
@@ -67,6 +63,9 @@ export default class Changed extends Command {
         // Typescript can't detect type guard through filter earlier
         if (isPackageJson(packageJson)) {
           this.log(chalk.bold(packageJson.name));
+        } else {
+          // Theoretically should never throw...
+          throw new CLIError(`Unknown object: ${packageJson}`);
         }
       }
     }

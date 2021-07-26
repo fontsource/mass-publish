@@ -1,6 +1,5 @@
-// file.only
-import chalk from "chalk";
 import { cli } from "cli-ux";
+import chalk from "chalk";
 import path from "path";
 import { mocked } from "ts-jest/utils";
 
@@ -62,13 +61,6 @@ describe("Bump command", () => {
     await expect(Bump.run(["1.1.1"])).rejects.toThrow(
       "No packages to update found."
     );
-
-    expect(results).toEqual([
-      "Checking packages...",
-      "!",
-      "Checking packages...",
-      "!",
-    ]);
   });
 
   test("success #2 - All changes", async () => {
@@ -78,21 +70,23 @@ describe("Bump command", () => {
     await expect(Bump.run(["minor"])).resolves.not.toThrow();
 
     expect(results).toEqual([
-      "Checking packages...",
-      `${path.join(
-        "src",
-        "changed",
-        "fixtures",
-        "test3",
-        "package.json"
-      )} may have been removed. Not publishing.`,
-      "Done.",
-      "Changed packages:",
-      "test1: 1.0.0 --> 1.1.0",
-      "test2: 1.1.0 --> 1.2.0",
-      "Bump 2 packages?",
-      "Writing updates...",
-      "Done.",
+      chalk.bold.blue("Checking packages..."),
+      chalk.red(
+        `${path.join(
+          "src",
+          "changed",
+          "fixtures",
+          "test3",
+          "package.json"
+        )} may have been removed. Not publishing.`
+      ),
+      chalk.bold.green("Done."),
+      chalk.bold.blue("Changed packages:"),
+      chalk.magenta("test1: 1.0.0 --> 1.1.0"),
+      chalk.magenta("test2: 1.1.0 --> 1.2.0"),
+      chalk.bold.green("Bump 2 packages?"),
+      chalk.blue("Writing updates..."),
+      chalk.green("Done."),
     ]);
   });
 
@@ -103,13 +97,13 @@ describe("Bump command", () => {
     await expect(Bump.run(["major"])).resolves.not.toThrow();
 
     expect(results).toEqual([
-      "Checking packages...",
-      "Done.",
-      "Changed packages:",
-      "test2: 1.1.0 --> 2.1.0",
-      "Bump 1 packages?",
-      "Writing updates...",
-      "Done.",
+      chalk.bold.blue("Checking packages..."),
+      chalk.bold.green("Done."),
+      chalk.bold.blue("Changed packages:"),
+      chalk.magenta("test2: 1.1.0 --> 2.1.0"),
+      chalk.bold.green("Bump 1 packages?"),
+      chalk.blue("Writing updates..."),
+      chalk.green("Done."),
     ]);
   });
 
@@ -120,8 +114,6 @@ describe("Bump command", () => {
     await expect(Bump.run(["major"])).rejects.toThrow(
       "No packages to update found."
     );
-
-    expect(results).toEqual(["Checking packages...", "!"]);
   });
 
   test("success #5 - test 3 remove, 2 package change", async () => {
@@ -131,21 +123,23 @@ describe("Bump command", () => {
     await expect(Bump.run(["5.12.35"])).resolves.not.toThrow();
 
     expect(results).toEqual([
-      "Checking packages...",
-      `${path.join(
-        "src",
-        "changed",
-        "fixtures",
-        "test3",
-        "package.json"
-      )} may have been removed. Not publishing.`,
-      "Done.",
-      "Changed packages:",
-      "test1: 1.0.0 --> 5.12.35",
-      "test2: 1.1.0 --> 5.12.35",
-      "Bump 2 packages?",
-      "Writing updates...",
-      "Done.",
+      chalk.bold.blue("Checking packages..."),
+      chalk.red(
+        `${path.join(
+          "src",
+          "changed",
+          "fixtures",
+          "test3",
+          "package.json"
+        )} may have been removed. Not publishing.`
+      ),
+      chalk.bold.green("Done."),
+      chalk.bold.blue("Changed packages:"),
+      chalk.magenta("test1: 1.0.0 --> 5.12.35"),
+      chalk.magenta("test2: 1.1.0 --> 5.12.35"),
+      chalk.bold.green("Bump 2 packages?"),
+      chalk.blue("Writing updates..."),
+      chalk.green("Done."),
     ]);
   });
 });

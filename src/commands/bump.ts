@@ -61,13 +61,13 @@ export default class Bump extends Command {
       skipPrompt = true;
     }
 
-    cli.action.start("Checking packages...");
+    cli.action.start(chalk.bold.blue("Checking packages..."));
     const bumpObjects = await createBumpObject(diff, bumpArg);
-    const checkedObjects = await bumpCheck(bumpObjects); // ?
+    const checkedObjects = await bumpCheck(bumpObjects);
     if (checkedObjects.length === 0) {
       throw new CLIError("No packages to update found.");
     }
-    cli.action.stop("Done.");
+    cli.action.stop(chalk.bold.green("Done."));
 
     this.log(chalk.bold.blue("Changed packages:"));
     for (const bumpObject of checkedObjects) {
@@ -80,15 +80,15 @@ export default class Bump extends Command {
 
     if (!skipPrompt) {
       const input = await cli.confirm(
-        `Bump ${checkedObjects.length} packages?`
+        chalk.bold.green(`Bump ${checkedObjects.length} packages?`)
       );
       if (!input) {
         throw new CLIError("Bump cancelled.");
       }
     }
 
-    cli.action.start("Writing updates...");
+    cli.action.start(chalk.blue("Writing updates..."));
     await bumpWrite(checkedObjects);
-    cli.action.stop("Done.");
+    cli.action.stop(chalk.green("Done."));
   }
 }
