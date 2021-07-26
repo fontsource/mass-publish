@@ -13,7 +13,7 @@ describe("Path to package", () => {
     });
 
     const names = pathToPackage([path.join("src", "test")]);
-    expect(names[0].name).toEqual("Test Package");
+    expect(names[0]).toEqual({ name: "Test Package" });
   });
 
   test("Unsuccessful read", () => {
@@ -23,7 +23,7 @@ describe("Path to package", () => {
       .mockImplementation(val => result.push(String(val).trim()));
 
     const names = pathToPackage([path.join("src", "test")]);
-    expect(names).toEqual([]);
+    expect(names).toEqual([{ removed: true }]);
     expect(result).toEqual([
       chalk.red(
         `${path.join(

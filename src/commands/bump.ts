@@ -1,5 +1,6 @@
 /* eslint-disable complexity */
 import { Command, flags } from "@oclif/command";
+import { CLIError } from "@oclif/errors";
 import { cli } from "cli-ux";
 import chalk from "chalk";
 import semver from "semver";
@@ -36,42 +37,58 @@ export default class Bump extends Command {
 
     // Args
     const bumpArg = args.version;
-    if (
-      bumpArg !== "patch" ||
-      bumpArg !== "minor" ||
-      bumpArg !== "major" ||
-      semver.valid(bumpArg)
-    ) {
-      throw new Error("Incorrect bump argument .");
+    const validBumpArgs = new Set(["patch", "minor", "major"]);
+
+    // If it isn't a bumpArg in the set or isn't a semver version number
+    if (!validBumpArgs.has(bumpArg) && !semver.valid(bumpArg)) {
+      throw new CLIError("Incorrect bump argument.");
     }
 
     // Flags
-    let verify = true || config.noVerify;
-    if (flags["no-verify"]) verify = false;
+    let verify = true;
+    if (flags["no-verify"]) {
+      verify = false;
+    }
 
-    let autoBump = false || config.autoBump;
-    if (flags["auto-bump"]) autoBump = true;
+    let autoBump = false;
+    if (flags["auto-bump"]) {
+      autoBump = true;
+    }
 
     // If there are no packages to publish, no need for confirmation prompt
-    let skipPrompt = false || config.yes;
-    if (flags.yes) skipPrompt = true;
+    let skipPrompt = false;
+    if (flags.yes) {
+      skipPrompt = true;
+    }
 
     cli.action.start("Checking packages...");
     const bumpObjects = await createBumpObject(diff, bumpArg);
-    const checkedObjects = await bumpCheck(bumpObjects);
-    cli.action.stop("Done");
+    const checkedObjects = await bumpCheck(bumpObjects); // ?
+    if (checkedObjects.length === 0) {
+      throw new CLIError("No packages to update found.");
+    }
+    cli.action.stop("Done.");
+
+    this.log(chalk.bold.blue("Changed packages:"));
+    for (const bumpObject of checkedObjects) {
+      this.log(
+        chalk.magenta(
+          `${bumpObject.packageFile.name}: ${bumpObject.packageFile.version} --> ${bumpObject.bumpedVersion}`
+        )
+      );
+    }
 
     if (!skipPrompt) {
       const input = await cli.confirm(
         `Bump ${checkedObjects.length} packages?`
       );
       if (!input) {
-        throw new Error("Bump cancelled.");
+        throw new CLIError("Bump cancelled.");
       }
     }
 
     cli.action.start("Writing updates...");
     await bumpWrite(checkedObjects);
-    cli.action.stop("Done");
+    cli.action.stop("Done.");
   }
 }

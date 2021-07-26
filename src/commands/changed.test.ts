@@ -1,4 +1,5 @@
 import chalk from "chalk";
+import { cli } from "cli-ux";
 import path from "path";
 
 import Changed from "./changed";
@@ -6,13 +7,23 @@ import Changed from "./changed";
 jest.setTimeout(50_000);
 
 describe("Changed command", () => {
-  let result: any;
+  let results: any;
 
   beforeEach(() => {
-    result = [];
+    results = [];
     jest
       .spyOn(process.stdout, "write")
-      .mockImplementation(val => result.push(String(val).trim()));
+      .mockImplementation(val => results.push(String(val).trim()));
+    jest
+      .spyOn(process.stderr, "write")
+      .mockImplementation(val => results.push(String(val).trim()));
+
+    jest
+      .spyOn(cli.action, "start")
+      .mockImplementation(val => results.push(String(val).trim()));
+    jest
+      .spyOn(cli.action, "stop")
+      .mockImplementation(val => results.push(String(val).trim()));
   });
 
   afterEach(() => jest.restoreAllMocks());
@@ -22,7 +33,8 @@ describe("Changed command", () => {
       "--packages=src/changed/fixtures/test1/,src/changed/fixtures/test2/",
       "--commit-from=324088cb56010ce93a595eca2645840203c934b7",
     ]);
-    expect(result).toEqual([
+    expect(results).toEqual([
+      chalk.bold.blue("Checking packages..."),
       chalk.red(
         `${path.join(
           "src",
@@ -43,7 +55,8 @@ describe("Changed command", () => {
       "--commit-from=d08dd26bd63748ac7961f45d3bf46f7ef42f41d1",
       "--commit-to=7543c880fea5f70fb3ca5ac860be0fda2140e19d",
     ]);
-    expect(result).toEqual([
+    expect(results).toEqual([
+      chalk.bold.blue("Checking packages..."),
       chalk.red(
         `${path.join(
           "src",
@@ -65,7 +78,8 @@ describe("Changed command", () => {
       "--commit-from=7543c880fea5f70fb3ca5ac860be0fda2140e19d",
       "--commit-to=5059b64905315d7fdc2dcdfcdee51d052945ddf2",
     ]);
-    expect(result).toEqual([
+    expect(results).toEqual([
+      chalk.bold.blue("Checking packages..."),
       chalk.blue.bold("Packages changed:"),
       chalk.bold("test2"),
     ]);
@@ -78,16 +92,20 @@ describe("Changed command", () => {
       "--commit-from=7543c880fea5f70fb3ca5ac860be0fda2140e19d",
       "--commit-to=5059b64905315d7fdc2dcdfcdee51d052945ddf2",
     ]);
-    expect(result).toEqual([chalk.green.bold("No publish changes detected.")]);
+    expect(results).toEqual([
+      chalk.bold.blue("Checking packages..."),
+      chalk.green.bold("No publish changes detected."),
+    ]);
   });
 
-  test("find-diff.test.ts #5 - test 3 remove", async () => {
+  test("find-diff.test.ts #5 - test 3 remove, 2 package change", async () => {
     await Changed.run([
       "--packages=src/changed/fixtures/",
       "--commit-from=5059b64905315d7fdc2dcdfcdee51d052945ddf2",
       "--commit-to=f1ac53d7aa55ad07fe7df61b5ec810edc49e9fba",
     ]);
-    expect(result).toEqual([
+    expect(results).toEqual([
+      chalk.bold.blue("Checking packages..."),
       chalk.red(
         `${path.join(
           "src",

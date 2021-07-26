@@ -1,9 +1,11 @@
 import { Command, flags } from "@oclif/command";
 import chalk from "chalk";
+import { cli } from "cli-ux";
 
 import { findDiff } from "../changed/find-diff";
 import { pathToPackage } from "../utils/path-to-package";
 import { readConfig } from "../changed/read-config";
+import { isPackageJson } from "../utils/interfaces/is-package-json";
 
 export default class Changed extends Command {
   static description = "Detects what packages have changed since last publish";
@@ -27,11 +29,16 @@ export default class Changed extends Command {
   async run(): Promise<void> {
     const { flags } = this.parse(Changed);
 
+    cli.action.start(chalk.bold.blue("Checking packages..."));
     const config = await readConfig();
 
     // If there are any flags, override respective config
-    if (flags["commit-to"]) config.commitTo = flags["commit-to"];
-    if (flags["commit-from"]) config.commitFrom = flags["commit-from"];
+    if (flags["commit-to"]) {
+      config.commitTo = flags["commit-to"];
+    }
+    if (flags["commit-from"]) {
+      config.commitFrom = flags["commit-from"];
+    }
     if (flags["ignore-extension"]) {
       // Need to convert from string to array e.g. .js,.md -> [".js", ".md"]
       const array = flags["ignore-extension"].split(",");
@@ -41,16 +48,26 @@ export default class Changed extends Command {
       const array = flags.packages.split(",");
       config.packages = array;
     }
-    if (flags["commit-message"]) config.commitMessage = flags["commit-message"];
+    if (flags["commit-message"]) {
+      config.commitMessage = flags["commit-message"];
+    }
 
     const diff = await findDiff(config);
-    const packageJsons = pathToPackage(diff);
+
+    // Filter out all removed: true, packages.
+    const packageJsons = pathToPackage(diff).filter(packageJson =>
+      isPackageJson(packageJson)
+    );
+
     if (packageJsons.length === 0) {
-      this.log(chalk.green.bold("No publish changes detected."));
+      cli.action.stop(chalk.green.bold("No publish changes detected."));
     } else {
-      this.log(chalk.blue.bold("Packages changed:"));
+      cli.action.stop(chalk.blue.bold("Packages changed:"));
       for (const packageJson of packageJsons) {
-        this.log(chalk.bold(packageJson.name));
+        // Typescript can't detect type guard through filter earlier
+        if (isPackageJson(packageJson)) {
+          this.log(chalk.bold(packageJson.name));
+        }
       }
     }
   }
