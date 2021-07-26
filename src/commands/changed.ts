@@ -4,7 +4,7 @@ import chalk from "chalk";
 import { cli } from "cli-ux";
 
 import { readConfig, findDiff } from "../changed/changed";
-import { pathToPackage, isPackageJson } from "../utils/utils";
+import { changedFlags, pathToPackage, isPackageJson } from "../utils/utils";
 
 export default class Changed extends Command {
   static description = "Detects what packages have changed since last publish";
@@ -27,24 +27,9 @@ export default class Changed extends Command {
     const { flags } = this.parse(Changed);
 
     cli.action.start(chalk.bold.blue("Checking packages..."));
-    const config = await readConfig();
-
+    let config = await readConfig();
     // If there are any flags, override respective config
-    if (flags["commit-to"]) {
-      config.commitTo = flags["commit-to"];
-    }
-    if (flags["commit-from"]) {
-      config.commitFrom = flags["commit-from"];
-    }
-    if (flags["ignore-extension"]) {
-      // Need to convert from string to array e.g. .js,.md -> [".js", ".md"]
-      const array = flags["ignore-extension"].split(",");
-      config.ignoreExtension = array;
-    }
-    if (flags.packages) {
-      const array = flags.packages.split(",");
-      config.packages = array;
-    }
+    config = changedFlags(flags, config);
 
     const diff = await findDiff(config);
 

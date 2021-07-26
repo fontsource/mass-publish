@@ -149,12 +149,26 @@ describe("Bump command", () => {
     );
   });
 
+  test("Not confirm bump packages", async () => {
+    mockConfig(exampleConfig3);
+
+    jest.spyOn(cli, "confirm").mockImplementation(val => {
+      results.push(String(val).trim());
+      return Promise.resolve(false);
+    });
+
+    await expect(Bump.run(["major"])).rejects.toThrow("Bump cancelled.");
+  });
+
   test("No verify flag", async () => {
     mockConfig(exampleConfig3);
     const bumpCheck = jest.spyOn(check, "bumpCheck");
     await expect(Bump.run(["1.1.1", "--no-verify"])).resolves.not.toThrow();
 
     expect(bumpCheck).toBeCalledTimes(0);
+    expect(results).toContain(
+      chalk.red("Skipping version verification due to noVerify flag...")
+    );
   });
 
   test("Autobump flag", async () => {
@@ -180,14 +194,17 @@ describe("Bump command", () => {
     ]);
   });
 
-  test("Not confirm bump packages", async () => {
-    mockConfig(exampleConfig3);
+  test("Changed command flags", async () => {
+    mockConfig(exampleConfig1);
 
-    jest.spyOn(cli, "confirm").mockImplementation(val => {
-      results.push(String(val).trim());
-      return Promise.resolve(false);
-    });
-
-    await expect(Bump.run(["major"])).rejects.toThrow("Bump cancelled.");
+    await expect(
+      Bump.run([
+        "major",
+        "--packages=src/changed/fixtures/",
+        "--ignore-extension=.ts",
+        "--commit-from=7543c880fea5f70fb3ca5ac860be0fda2140e19d",
+        "--commit-to=5059b64905315d7fdc2dcdfcdee51d052945ddf2",
+      ])
+    ).rejects.toThrow("No packages to update found.");
   });
 });
