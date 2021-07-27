@@ -3,6 +3,7 @@ import log from "./log";
 import { pathToPackage } from "./path-to-package";
 
 import { isPackageJson } from "./guards/is-package-json";
+import { isValidBumpArg } from "./guards/is-valid-bump-arg";
 
 import type {
   PackageJson,
@@ -12,8 +13,10 @@ import type {
 import type {
   Flags,
   FlagsBump,
+  FlagsBumpReturn,
   FlagsChanged,
   FlagsPublish,
+  FlagsPublishReturn,
 } from "./interfaces/flags";
 
 export {
@@ -23,6 +26,7 @@ export {
   log,
   pathToPackage,
   isPackageJson,
+  isValidBumpArg,
 };
 export type {
   PackageJson,
@@ -30,6 +34,8 @@ export type {
   Removed,
   Flags,
   FlagsBump,
+  FlagsBumpReturn,
   FlagsChanged,
   FlagsPublish,
+  FlagsPublishReturn,
 };

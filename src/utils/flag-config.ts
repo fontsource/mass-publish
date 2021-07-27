@@ -1,8 +1,9 @@
 import type {
-  BumpFlags,
+  FlagsBumpReturn,
   FlagsBump,
   FlagsChanged,
   FlagsPublish,
+  FlagsPublishReturn,
 } from "./interfaces/flags";
 import type { Config } from "../changed/changed";
 
@@ -27,7 +28,7 @@ const changedFlags = (flags: Partial<FlagsChanged>, config: Config): Config => {
   return newConfig;
 };
 
-const bumpFlags = (flags: Partial<FlagsBump>): BumpFlags => {
+const bumpFlags = (flags: Partial<FlagsBump>): FlagsBumpReturn => {
   // Flags
   let noVerify = false;
   if (flags["no-verify"]) {
@@ -47,12 +48,12 @@ const bumpFlags = (flags: Partial<FlagsBump>): BumpFlags => {
   return { noVerify, autoBump, skipPrompt };
 };
 
-const publishFlags = (flags: Partial<FlagsPublish>): boolean => {
+const publishFlags = (flags: Partial<FlagsPublish>): FlagsPublishReturn => {
   let forcePublish = false;
   if (flags["force-publish"]) {
     forcePublish = true;
   }
-  return forcePublish;
+  return { forcePublish };
 };
 
 export { changedFlags, bumpFlags, publishFlags };

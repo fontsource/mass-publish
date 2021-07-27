@@ -21,6 +21,11 @@ describe("Bump Value", () => {
     expect(newVersion).toBe("2.5.1");
   });
 
+  test("From package", () => {
+    const newVersion = bumpValue("2.0.0", "from-package");
+    expect(newVersion).toBe("2.0.0");
+  });
+
   test("False input version", () => {
     const newVersion = bumpValue("a.b.c", "major");
     expect(newVersion).toBeFalsy();

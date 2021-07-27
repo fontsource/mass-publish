@@ -3,13 +3,10 @@ import { Command, flags } from "@oclif/command";
 import { CLIError } from "@oclif/errors";
 import { cli } from "cli-ux";
 import chalk from "chalk";
-import semver from "semver";
 
-import { bumpCheck, createBumpObject, bumpWrite } from "../bump/bump";
+import { bumpCliPrint, bumpWrite, createBumpObject } from "../bump/bump";
 import { readConfig, findDiff } from "../changed/changed";
-import { bumpFlags, changedFlags } from "../utils/utils";
-
-import type { BumpObject } from "../bump/bump";
+import { bumpFlags, changedFlags, isValidBumpArg } from "../utils/utils";
 
 export default class Bump extends Command {
   static description = "Bumps package versions";
@@ -49,10 +46,7 @@ export default class Bump extends Command {
 
     // Args
     const bumpArg = args.version;
-    const validBumpArgs = new Set(["patch", "minor", "major"]);
-
-    // If it isn't a bumpArg in the set and isn't a semver version number
-    if (!validBumpArgs.has(bumpArg) && !semver.valid(bumpArg)) {
+    if (!isValidBumpArg(bumpArg)) {
       throw new CLIError("Incorrect bump argument.");
     }
 
@@ -64,40 +58,8 @@ export default class Bump extends Command {
     const diff = await findDiff(config);
     const bumpObjects = await createBumpObject(diff, bumpArg);
 
-    const { noVerify, autoBump, skipPrompt } = bumpFlags(flags);
-    // Skip checking if no verify flag
-    let checkedObjects: BumpObject[];
-    if (noVerify) {
-      this.log(
-        chalk.red("Skipping version verification due to noVerify flag...")
-      );
-      checkedObjects = bumpObjects;
-    } else {
-      checkedObjects = await bumpCheck(bumpObjects, autoBump);
-    }
-
-    if (checkedObjects.length === 0) {
-      throw new CLIError("No packages to update found.");
-    }
-    cli.action.stop(chalk.bold.green("Done."));
-
-    this.log(chalk.bold.blue("Changed packages:"));
-    for (const bumpObject of checkedObjects) {
-      this.log(
-        chalk.magenta(
-          `${bumpObject.packageFile.name}: ${bumpObject.packageFile.version} --> ${bumpObject.bumpedVersion}`
-        )
-      );
-    }
-
-    if (!skipPrompt) {
-      const input = await cli.confirm(
-        chalk.bold.green(`Bump ${checkedObjects.length} packages?`)
-      );
-      if (!input) {
-        throw new CLIError("Bump cancelled.");
-      }
-    }
+    const bumpFlagVars = bumpFlags(flags);
+    const checkedObjects = await bumpCliPrint(bumpFlagVars, bumpObjects);
 
     cli.action.start(chalk.blue("Writing updates..."));
     await bumpWrite(checkedObjects);

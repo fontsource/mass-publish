@@ -19,6 +19,9 @@ const bumpValue = (oldVersion: string, bumpArg: string): string | false => {
       arr[0] = String(newNum);
       return arr.join(".");
     }
+    if (bumpArg === "from-package") {
+      return arr.join(".");
+    }
     // Else just return number version
     if (semver.valid(bumpArg)) {
       return bumpArg;

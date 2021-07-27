@@ -1,6 +1,7 @@
 import jsonfile from "jsonfile";
 import Init from "./init";
 
+jest.setTimeout(50_000);
 test("Init command", async () => {
   const results: any = [];
   jest

@@ -15,12 +15,16 @@ export interface FlagsBump extends Flags {
   yes: boolean;
 }
 
+export interface FlagsBumpReturn {
+  autoBump: boolean;
+  noVerify: boolean;
+  skipPrompt: boolean;
+}
+
 export interface FlagsPublish extends Flags {
   "force-publish": boolean;
 }
 
-export interface BumpFlags {
-  autoBump: boolean;
-  noVerify: boolean;
-  skipPrompt: boolean;
+export interface FlagsPublishReturn {
+  forcePublish: boolean;
 }
