@@ -25,6 +25,10 @@ npx mass-publish init
     packages: ["packages/"], // Directories to check for changes
     ignoreExtension: [".json"], // Ignore differneces with file extension of a certain type (Optional)
     commitMessage: "chore: release new versions", // Commit message on publish
+    git: { // Git credentials (optional as it should try finding system gitconfig)
+        name: "DecliningLotus",
+        email: "declininglotus@gmail.com",
+    }
     commitFrom: "fullsha", // Commit SHA to compare differences from. This is automatically updated on every publish.
     commitTo: "fullsha", // Commit SHA to compare differences to. Default is the head commit (Optional)
     noVerify: false, // Refer to changed command flag
@@ -34,6 +38,15 @@ npx mass-publish init
 ```
 
 Reference: [`config.ts`](https://github.com/fontsource/mass-publish/blob/main/src/changed/interfaces/config.ts)
+
+### Environment variables
+
+These can be saved in a `.env` file or through your CI modifying `process.env` as secrets.
+
+```js
+NPM_AUTH_TOKEN= //https://docs.npmjs.com/creating-and-viewing-access-tokens
+GITHUB_TOKEN= //https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token
+```
 
 ## Commands
 
