@@ -1,17 +1,12 @@
-import { promises as fs } from "fs";
-import { resolveRef } from "isomorphic-git";
+import execa from "execa";
 import jsonfile from "jsonfile";
 import path from "path";
 
 import type { Config } from "../changed/changed";
 
 const getHeadCommit = async (): Promise<string> => {
-  try {
-    const commit = await resolveRef({ fs, dir: process.cwd(), ref: "HEAD" });
-    return commit;
-  } catch {
-    throw new Error("Unable to get HEAD commit to update config.");
-  }
+  const { stdout } = await execa("git", ["rev-parse", "HEAD"]);
+  return stdout;
 };
 
 const updateConfig = async (config: Config): Promise<void> => {

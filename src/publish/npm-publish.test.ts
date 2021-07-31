@@ -10,6 +10,7 @@ import { npmPublish } from "./npm-publish";
 
 import type { BumpObject } from "../bump/bump";
 
+jest.mock("dotenv");
 jest.mock("libnpmpublish");
 
 describe("NPM publish function", () => {

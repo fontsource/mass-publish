@@ -10,7 +10,7 @@ import {
   isValidBumpArg,
 } from "../utils/utils";
 
-export default class Changed extends Command {
+export default class Publish extends Command {
   static description = "Publishes changed packages";
 
   static flags = {
@@ -49,7 +49,7 @@ export default class Changed extends Command {
   static args = [{ name: "version" }];
 
   async run(): Promise<void> {
-    const { args, flags } = this.parse(Changed);
+    const { args, flags } = this.parse(Publish);
 
     // Args
     const bumpArg = args.version;

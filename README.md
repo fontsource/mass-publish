@@ -28,7 +28,7 @@ npx mass-publish init
     git: { // Git credentials (optional as it should try finding system gitconfig)
         name: "DecliningLotus",
         email: "declininglotus@gmail.com",
-    }
+    },
     commitFrom: "fullsha", // Commit SHA to compare differences from. This is automatically updated on every publish.
     commitTo: "fullsha", // Commit SHA to compare differences to. Default is the head commit (Optional)
     noVerify: false, // Refer to changed command flag
@@ -52,6 +52,6 @@ GITHUB_TOKEN= //https://docs.github.com/en/github/authenticating-to-github/keepi
 
 ## How It Works
 
-1. Use isomorphic-git to compare the last known mass-publish commit (or custom hash) with the latest commits and determine the changes from the diff.
+1. Use Git to compare the last known mass-publish commit (or custom hash) with the latest commits and determine the changes from the diff.
 2. Bump packages and validate they are publishable by comparing versions on the NPM registry using package-json.
 3. Use pacote and libnpmpublish to pack and publish the packages using an async queue.

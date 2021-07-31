@@ -1,11 +1,7 @@
-/* eslint-disable complexity */
-/* eslint-disable new-cap */
-import fs from "fs";
-import { walk, TREE } from "isomorphic-git";
-
+import execa from "execa";
 import path from "path";
 
-import type { Config, GitWalk } from "./changed";
+import type { Config } from "./changed";
 
 const findDiff = async ({
   packages,
@@ -14,52 +10,15 @@ const findDiff = async ({
   commitTo = "HEAD",
 }: Config): Promise<string[]> => {
   // Diffs the two commmits
-  const files: GitWalk[] = await walk({
-    fs,
-    dir: process.cwd(),
-    trees: [TREE({ ref: commitFrom }), TREE({ ref: commitTo })],
-    async map(filepath, [A, B]) {
-      // ignore directories
-      if (filepath === ".") {
-        return;
-      }
-      if (
-        (A && (await A.type())) === "tree" ||
-        (B && (await B.type()) === "tree")
-      ) {
-        return;
-      }
+  const files = await execa("git", [
+    "diff",
+    "--name-only",
+    commitFrom,
+    commitTo,
+  ]);
 
-      // generate ids
-      const Aoid = A ? await A.oid() : undefined;
-      const Boid = B ? await B.oid() : undefined;
-
-      // determine modification type
-      let type = "equal";
-      if (Aoid !== Boid) {
-        type = "modify";
-      }
-      if (Aoid === undefined) {
-        type = "add";
-      }
-      if (Boid === undefined) {
-        type = "remove";
-      }
-      if (Aoid === undefined && Boid === undefined) {
-        throw new Error(`Git walk error: ${A} ${B}`);
-      }
-
-      // eslint-disable-next-line consistent-return
-      return {
-        path: `${filepath}`,
-        type,
-      };
-    },
-  });
-
-  const filteredFiles = files
-    .filter(item => item.type !== "equal")
-    .map(item => item.path);
+  // Files only returns a single string of all of stdout
+  const filteredFiles = files.stdout.split("\n");
 
   // Removes all diffs that do not match the configuration
   const filteredPaths = filteredFiles.filter(path => {

@@ -7,7 +7,7 @@ import parse from "parse-git-config";
 import type { Config, Git } from "../changed/changed";
 
 const getGitConfig = async (config: Config): Promise<Git> => {
-  if (config.git) {
+  if (config.git?.name && config.git?.email) {
     return config.git;
   }
 
@@ -23,7 +23,7 @@ const getGitConfig = async (config: Config): Promise<Git> => {
     return author;
   } catch (error) {
     throw new CLIError(
-      "Error reading Git config. Try including Git details in mass-publish.json",
+      "Error reading Git config. Try including user and email Git details in mass-publish.json",
       error
     );
   }
