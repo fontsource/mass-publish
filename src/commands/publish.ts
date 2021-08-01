@@ -3,6 +3,7 @@ import { CLIError } from "@oclif/errors";
 
 import { bumpCliPrint, bumpWrite, createBumpObject } from "../bump/bump";
 import { readConfig, findDiff } from "../changed/changed";
+import { npmPublish, gitRun, publishChecks } from "../publish/publish";
 import {
   changedFlags,
   bumpFlags,
@@ -71,5 +72,10 @@ export default class Publish extends Command {
     await bumpWrite(checkedObjects);
 
     const { forcePublish } = publishFlags(flags);
+
+    await publishChecks(config);
+    await gitRun(config, checkedObjects);
+    await npmPublish(checkedObjects);
+    this.log(chalk.green("Successfully published all packages!"));
   }
 }

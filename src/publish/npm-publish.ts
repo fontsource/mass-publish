@@ -1,7 +1,6 @@
 import { CLIError } from "@oclif/errors";
 import chalk from "chalk";
 import { cli } from "cli-ux";
-import * as dotenv from "dotenv";
 import { publish } from "libnpmpublish";
 import { manifest, tarball } from "pacote";
 import PQueue from "p-queue";
@@ -38,12 +37,7 @@ const packPublish = async (bumpObject: BumpObject) => {
 };
 
 const npmPublish = (bumpObjects: BumpObject[]): Promise<void[]> => {
-  dotenv.config();
   const publishArr: Promise<void>[] = [];
-
-  if (!process.env.NPM_AUTH_TOKEN) {
-    throw new CLIError("No NPM auth token found in environment!");
-  }
 
   for (const bumpObject of bumpObjects) {
     if (!bumpObject.noPublish) {

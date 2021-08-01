@@ -1,12 +1,8 @@
-import { CLIError } from "@oclif/errors";
-import * as dotenv from "dotenv";
-
 import { newCommitMessage } from "./commit-message";
 import { getGitConfig } from "./git-config";
 import {
   gitAdd,
   gitCommit,
-  gitConfig,
   gitPush,
   gitRemoteAdd,
   gitRemoteUrl,
@@ -20,18 +16,8 @@ const gitRun = async (
   config: Config,
   bumpObjects: BumpObject[]
 ): Promise<void> => {
-  dotenv.config();
-
-  // Configure Git if specified
-  await gitConfig(config);
-
   // Ensure all variables are ready before running git commands
   const { name } = await getGitConfig(config);
-  if (!process.env.GITHUB_TOKEN) {
-    throw new CLIError(
-      "Missing Github Personal Access Token (GITHUB_TOKEN) in environment! "
-    );
-  }
 
   // Update mass-publish.json with new commitFrom hash before pushing
   await updateConfig(config);
