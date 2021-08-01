@@ -171,14 +171,6 @@ describe("Bump command", () => {
     );
   });
 
-  test("Autobump flag", async () => {
-    mockConfig(exampleConfig3);
-    const bumpCheck = jest.spyOn(check, "bumpCheck");
-
-    await expect(Bump.run(["patch", "--auto-bump"])).resolves.not.toThrow();
-    expect(bumpCheck).toHaveBeenCalledWith(expect.anything(), true);
-  });
-
   test("Yes flag", async () => {
     mockConfig(exampleConfig3);
 

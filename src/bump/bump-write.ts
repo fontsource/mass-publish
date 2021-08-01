@@ -1,24 +1,16 @@
-import chalk from "chalk";
 import jsonfile from "jsonfile";
 import path from "path";
 
 import { BumpObject } from "./interfaces/bump-object";
-import log from "../utils/log";
 
 const writeUpdate = async (item: BumpObject) => {
   const newPackageFile = item.packageFile;
-  if (item.bumpedVersion && !item.failedValidation) {
+  if (item.bumpedVersion && !item.noPublish) {
     newPackageFile.version = item.bumpedVersion;
 
     await jsonfile.writeFile(
       path.join(item.packagePath, "package.json"),
       newPackageFile
-    );
-  } else {
-    log(
-      chalk.red(
-        `Did not write ${item.packageFile.name} due to failed bump validation.`
-      )
     );
   }
 };

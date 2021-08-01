@@ -31,7 +31,7 @@ describe("Bump check", () => {
       },
     ];
 
-    const checkedList = await bumpCheck(validList);
+    const checkedList = await bumpCheck(validList, "patch");
     expect(checkedList).toEqual(validList);
   });
 
@@ -48,11 +48,11 @@ describe("Bump check", () => {
       },
     ];
 
-    const checkedList = await bumpCheck(validList);
+    const checkedList = await bumpCheck(validList, "patch");
     expect(checkedList).toEqual(validList);
   });
 
-  test("Failed check, no autobump", async () => {
+  test("Failed check", async () => {
     const mockedLatestVersion = mocked(latestVersion, false);
     mockedLatestVersion.mockResolvedValue("1.0.1");
 
@@ -63,23 +63,11 @@ describe("Bump check", () => {
         bumpedVersion: "1.0.1",
       },
     ];
-    const validList: BumpObject[] = [
-      {
-        packageFile: { name: "test-1", version: "1.0.0" },
-        packagePath: "src/test",
-        bumpedVersion: "1.0.1",
-        failedValidation: true,
-      },
-    ];
 
-    const checkedList = await bumpCheck(bumpList);
-    expect(checkedList).toEqual(validList);
-    expect(results).toEqual([
-      chalk.red("test-1 version mismatch. Failed to bump. Not publishing."),
-    ]);
+    await expect(bumpCheck(bumpList, "patch")).rejects.toThrow();
   });
 
-  test("Autobump", async () => {
+  test("From package", async () => {
     const mockedLatestVersion = mocked(latestVersion, false);
     mockedLatestVersion.mockResolvedValue("1.0.1");
 
@@ -90,20 +78,8 @@ describe("Bump check", () => {
         bumpedVersion: "1.0.1",
       },
     ];
-    const validList: BumpObject[] = [
-      {
-        packageFile: { name: "test-1", version: "1.0.0" },
-        packagePath: "src/test",
-        bumpedVersion: "1.0.2",
-      },
-    ];
 
-    const checkedList = await bumpCheck(bumpList, true);
-    expect(checkedList).toEqual(validList);
-    expect(results).toEqual([
-      chalk.red(
-        "test-1 version mismatch. NPM version 1.0.1. Bump value 1.0.1. Auto-bumping..."
-      ),
-    ]);
+    const list = await bumpCheck(bumpList, "from-package");
+    expect(list[0].noPublish).toBe(true);
   });
 });

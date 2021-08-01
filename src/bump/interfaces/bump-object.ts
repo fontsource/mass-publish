@@ -4,5 +4,5 @@ export interface BumpObject {
   packageFile: PackageJson;
   packagePath: string;
   bumpedVersion: string | false;
-  failedValidation?: boolean;
+  noPublish?: boolean;
 }

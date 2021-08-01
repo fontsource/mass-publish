@@ -46,8 +46,10 @@ const npmPublish = (bumpObjects: BumpObject[]): Promise<void[]> => {
   }
 
   for (const bumpObject of bumpObjects) {
-    const publishItem = queue.add(() => packPublish(bumpObject));
-    publishArr.push(publishItem);
+    if (!bumpObject.noPublish) {
+      const publishItem = queue.add(() => packPublish(bumpObject));
+      publishArr.push(publishItem);
+    }
   }
 
   return Promise.all(publishArr);

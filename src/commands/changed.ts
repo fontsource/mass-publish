@@ -15,6 +15,8 @@ export default class Changed extends Command {
     "commit-to": flags.string({ description: "Compare to commit hash" }),
     // Overrides commitFrom value in config --commit-from=
     "commit-from": flags.string({ description: "Compare from commit hash" }),
+    // Overrides commitMessage value in config --commit-message=
+    "commit-message": flags.string({ description: "Commit message" }),
     // Overrides ignoreExtension values in config --ignore-changes=.js,.md
     "ignore-extension": flags.string({ description: "Ignore file extensions" }),
     // Overrides packages value in config --packages=./packages,./other-packages

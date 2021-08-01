@@ -17,10 +17,6 @@ export default class Bump extends Command {
     "no-verify": flags.boolean({
       description: "Skip checking NPM registry for conflicting versions",
     }),
-    // flag to patch auto-bump a package if version matches NPM version --auto-bump
-    "auto-bump": flags.boolean({
-      description: "Auto-bump package if specified version is too low",
-    }),
     // flag to skip confirmation to write package bumps --yes
     yes: flags.boolean({
       description: "Skip confirmation to write bumped versions to package.json",
@@ -31,6 +27,8 @@ export default class Bump extends Command {
     "commit-to": flags.string({ description: "Compare to commit hash" }),
     // Overrides commitFrom value in config --commit-from=
     "commit-from": flags.string({ description: "Compare from commit hash" }),
+    // Overrides commitMessage value in config --commit-message=
+    "commit-message": flags.string({ description: "Commit message" }),
     // Overrides ignoreExtension values in config --ignore-changes=.js,.md
     "ignore-extension": flags.string({ description: "Ignore file extensions" }),
     // Overrides packages value in config --packages=./packages,./other-packages
@@ -59,7 +57,11 @@ export default class Bump extends Command {
     const bumpObjects = await createBumpObject(diff, bumpArg);
 
     const bumpFlagVars = bumpFlags(flags);
-    const checkedObjects = await bumpCliPrint(bumpFlagVars, bumpObjects);
+    const checkedObjects = await bumpCliPrint(
+      bumpFlagVars,
+      bumpObjects,
+      bumpArg
+    );
 
     cli.action.start(chalk.blue("Writing updates..."));
     await bumpWrite(checkedObjects);

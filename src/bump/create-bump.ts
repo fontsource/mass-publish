@@ -24,7 +24,7 @@ const createBumpObject = (diff: string[], bumpArg: string): BumpObject[] => {
             packageFile: packageJson,
             packagePath: filePath,
             bumpedVersion,
-            failedValidation: true,
+            noPublish: true,
           };
 
       bumpObjectArr.push(bumpObject);

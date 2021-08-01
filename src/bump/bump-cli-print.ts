@@ -10,7 +10,8 @@ import type { FlagsBumpReturn } from "../utils/utils";
 
 const bumpCliPrint = async (
   bumpFlagVar: FlagsBumpReturn,
-  bumpObjects: BumpObject[]
+  bumpObjects: BumpObject[],
+  bumpArg: string
 ): Promise<BumpObject[]> => {
   // Skip checking if no verify flag
   let checkedObjects: BumpObject[];
@@ -18,7 +19,7 @@ const bumpCliPrint = async (
     log(chalk.red("Skipping version verification due to noVerify flag..."));
     checkedObjects = bumpObjects;
   } else {
-    checkedObjects = await bumpCheck(bumpObjects, bumpFlagVar.autoBump);
+    checkedObjects = await bumpCheck(bumpObjects, bumpArg);
   }
 
   if (checkedObjects.length === 0) {
@@ -36,8 +37,12 @@ const bumpCliPrint = async (
   }
 
   if (!bumpFlagVar.skipPrompt) {
+    // Filter out any objects with the noPublish flag attached to them
+    const publishObjects = checkedObjects.filter(
+      bumpObject => !bumpObject.noPublish
+    );
     const input = await cli.confirm(
-      chalk.bold.green(`Bump ${checkedObjects.length} packages?`)
+      chalk.bold.green(`Bump ${publishObjects.length} packages?`)
     );
     if (!input) {
       throw new CLIError("Bump cancelled.");

@@ -15,6 +15,9 @@ const changedFlags = (flags: Partial<FlagsChanged>, config: Config): Config => {
   if (flags["commit-from"]) {
     newConfig.commitFrom = flags["commit-from"];
   }
+  if (flags["commit-message"]) {
+    newConfig.commitMessage = flags["commit-message"];
+  }
   if (flags["ignore-extension"]) {
     // Need to convert from string to array e.g. .js,.md -> [".js", ".md"]
     const array = flags["ignore-extension"].split(",");
@@ -35,17 +38,12 @@ const bumpFlags = (flags: Partial<FlagsBump>): FlagsBumpReturn => {
     noVerify = true;
   }
 
-  let autoBump = false;
-  if (flags["auto-bump"]) {
-    autoBump = true;
-  }
-
   // If there are no packages to publish, no need for confirmation prompt
   let skipPrompt = false;
   if (flags.yes) {
     skipPrompt = true;
   }
-  return { noVerify, autoBump, skipPrompt };
+  return { noVerify, skipPrompt };
 };
 
 const publishFlags = (flags: Partial<FlagsPublish>): FlagsPublishReturn => {

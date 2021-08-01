@@ -2,11 +2,9 @@ import { Command, flags } from "@oclif/command";
 import jsonfile from "jsonfile";
 import path from "path";
 
-const defaultConfig = {
-  packages: ["packages/"],
-  ignoreExtension: [],
-  commitMessage: "chore: release new versions",
-};
+import { getHeadCommit } from "../publish/publish";
+
+import type { Config } from "../changed/changed";
 
 export default class Init extends Command {
   static description = "Generates mass-publish.json";
@@ -17,6 +15,14 @@ export default class Init extends Command {
 
   async run(): Promise<void> {
     const filePath = path.join(process.cwd(), "mass-publish.json");
+    const headCommit = await getHeadCommit();
+    const defaultConfig: Config = {
+      packages: ["packages/"],
+      ignoreExtension: [],
+      commitMessage: "chore: release new versions",
+      commitFrom: headCommit,
+    };
+    defaultConfig.commitFrom = headCommit;
     await jsonfile.writeFile(filePath, defaultConfig);
     this.log("mass-publish.json has been created.");
   }

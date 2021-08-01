@@ -1,16 +1,14 @@
+import { CLIError } from "@oclif/errors";
 import chalk from "chalk";
 import PQueue from "p-queue";
 import semver from "semver";
 import latestVersion from "latest-version";
 
-import { bumpValue } from "./bump-value";
-import { log } from "../utils/utils";
-
 import type { BumpObject } from "./bump";
 
 const queue = new PQueue({ concurrency: 12 });
 
-const validate = async (item: BumpObject, autoBump: boolean) => {
+const validate = async (item: BumpObject, bumpArg: string) => {
   let npmVersion: string | boolean;
   try {
     // Get latest version from NPM registry and compare if bumped version is greater than NPM
@@ -23,39 +21,28 @@ const validate = async (item: BumpObject, autoBump: boolean) => {
     return item;
   }
 
-  // If bumped value is not greater than NPM, auto bump with patch
+  // If failed, do not publish
   const newItem = item;
-  if (autoBump) {
-    const newVersion = bumpValue(npmVersion, "patch");
-    if (newVersion) {
-      log(
-        chalk.red(
-          `${newItem.packageFile.name} version mismatch. NPM version ${npmVersion}. Bump value ${item.bumpedVersion}. Auto-bumping...`
-        )
-      );
-      newItem.bumpedVersion = newVersion;
-      return newItem;
-    }
+  newItem.noPublish = true;
+  if (bumpArg === "from-package") {
+    return newItem;
   }
 
-  // If failed to bump again, will not publish
-  newItem.failedValidation = true;
-  log(
+  throw new CLIError(
     chalk.red(
-      `${newItem.packageFile.name} version mismatch. Failed to bump. Not publishing.`
+      `${newItem.packageFile.name} version mismatch. Not publishing.\n- NPM: ${npmVersion}\n- Bumped version: ${item.bumpedVersion}`
     )
   );
-  return newItem;
 };
 
 const bumpCheck = async (
   bumpList: BumpObject[],
-  autoBump = false
+  bumpArg: string
 ): Promise<BumpObject[]> => {
   const checkedList: Promise<BumpObject>[] = [];
 
   for (const item of bumpList) {
-    const validatedItem = queue.add(() => validate(item, autoBump));
+    const validatedItem = queue.add(() => validate(item, bumpArg));
     checkedList.push(validatedItem);
   }
 
