@@ -3,12 +3,13 @@ import path from "path";
 
 import type { Config } from "./changed";
 
-const findDiff = async ({
-  packages,
-  ignoreExtension = [],
-  commitFrom,
-  commitTo = "HEAD",
-}: Config): Promise<string[]> => {
+const findDiff = async (
+  { packages, ignoreExtension = [], commitFrom, commitTo = "HEAD" }: Config,
+  forcePublish = false
+): Promise<string[]> => {
+  if (forcePublish) {
+    // Find all directories in packages specified directories
+  }
   // Diffs the two commmits
   const files = await execa("git", [
     "diff",
@@ -60,6 +61,7 @@ const findDiff = async ({
 
   // Multiple changed files in same dir would produce multiple duplicate dirPaths
   const noDuplicatesDirPaths = [...new Set(dirPaths)];
+  console.log(noDuplicatesDirPaths);
   return noDuplicatesDirPaths;
 };
 

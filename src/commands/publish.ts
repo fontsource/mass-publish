@@ -1,5 +1,6 @@
 import { Command, flags } from "@oclif/command";
 import { CLIError } from "@oclif/errors";
+import chalk from "chalk";
 
 import { bumpCliPrint, bumpWrite, createBumpObject } from "../bump/bump";
 import { readConfig, findDiff } from "../changed/changed";
