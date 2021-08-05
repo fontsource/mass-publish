@@ -1,4 +1,5 @@
 import execa from "execa";
+import { promises as fs } from "fs";
 import path from "path";
 
 import type { Config } from "./changed";
@@ -9,6 +10,24 @@ const findDiff = async (
 ): Promise<string[]> => {
   if (forcePublish) {
     // Find all directories in packages specified directories
+    const dirs = [];
+    for (const packageDir of packages) {
+      const packagesToUpdate = fs.readdir(
+        path.join(process.cwd(), packageDir),
+        { withFileTypes: true }
+      );
+      dirs.push(packagesToUpdate);
+    }
+
+    // Convert Promise<string[]>[] to string[]
+    const diff = await Promise.all(dirs);
+    const flattenedDiff = diff
+      .flat()
+      // Ignore single files only show directories
+      .filter(dirent => dirent.isDirectory())
+      .map(dirent => dirent.name);
+
+    return flattenedDiff;
   }
   // Diffs the two commmits
   const files = await execa("git", [
@@ -61,8 +80,7 @@ const findDiff = async (
 
   // Multiple changed files in same dir would produce multiple duplicate dirPaths
   const noDuplicatesDirPaths = [...new Set(dirPaths)];
-  console.log(noDuplicatesDirPaths);
-  return noDuplicatesDirPaths;
+  return noDuplicatesDirPaths; // ?
 };
 
 export { findDiff };

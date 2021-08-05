@@ -68,12 +68,4 @@ describe("NPM publish function", () => {
       "Encountered an error publishing test2! test-fail"
     );
   });
-  test("No NPM auth token", async () => {
-    const diff = await findDiff(exampleConfig3);
-    const bumpObjects = await createBumpObject(diff, "from-package");
-
-    await expect(async () => npmPublish(bumpObjects)).rejects.toThrow(
-      "No NPM auth token found in environment!"
-    );
-  });
 });

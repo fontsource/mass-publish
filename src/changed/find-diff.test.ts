@@ -10,8 +10,6 @@ import {
 
 import { findDiff } from "./find-diff";
 
-jest.setTimeout(50_000);
-
 describe("Find diff", () => {
   test("Find test package difference #1 - no change", () => {
     return findDiff(exampleConfig1).then(files => {
@@ -51,5 +49,15 @@ describe("Find diff", () => {
         path.join("src", "changed", "fixtures", "test3"),
       ]);
     });
+  });
+
+  test("forcepublish flag", async () => {
+    // Has random files that needs to be ignored
+    const files1 = await findDiff(exampleConfig1, true);
+    expect(files1).toEqual(["subdir1"]);
+
+    // Only directories
+    const files5 = await findDiff(exampleConfig5, true);
+    expect(files5).toEqual(["test1", "test2"]);
   });
 });

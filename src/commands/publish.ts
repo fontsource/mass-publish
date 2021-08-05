@@ -61,7 +61,8 @@ export default class Publish extends Command {
     // If there are any flags, override respective config
     config = changedFlags(flags, config);
 
-    const diff = await findDiff(config);
+    const { forcePublish } = publishFlags(flags);
+    const diff = await findDiff(config, forcePublish);
     const bumpObjects = await createBumpObject(diff, bumpArg);
 
     const bumpFlagVars = bumpFlags(flags);
@@ -71,8 +72,6 @@ export default class Publish extends Command {
       bumpArg
     );
     await bumpWrite(checkedObjects);
-
-    const { forcePublish } = publishFlags(flags);
 
     await publishChecks(config);
     await gitRun(config, checkedObjects);
