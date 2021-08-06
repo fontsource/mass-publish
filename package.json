@@ -22,7 +22,8 @@
     "commands": "./lib/commands",
     "bin": "mass-publish",
     "plugins": [
-      "@oclif/plugin-help"
+      "@oclif/plugin-help",
+      "@oclif/plugin-warn-if-update-available"
     ]
   },
   "engines": {
@@ -39,6 +40,7 @@
     "@oclif/command": "^1.8.0",
     "@oclif/config": "^1.17.0",
     "@oclif/plugin-help": "^3.2.2",
+    "@oclif/plugin-warn-if-update-available": "^1.7.0",
     "chalk": "^4.1.2",
     "dotenv": "^10.0.0",
     "execa": "^5.1.1",

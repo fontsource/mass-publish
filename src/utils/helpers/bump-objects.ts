@@ -8,8 +8,8 @@ const testBumpObjects = async (
   config: Config,
   bumpArg: string
 ): Promise<BumpObject[]> => {
-  const diff = await findDiff(config); // ?
-  return createBumpObject(diff, bumpArg); // ?
+  const diff = await findDiff(config);
+  return createBumpObject(diff, bumpArg);
 };
 
 export { testBumpObjects };

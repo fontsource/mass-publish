@@ -61,6 +61,7 @@ export default class Publish extends Command {
     // If there are any flags, override respective config
     config = changedFlags(flags, config);
 
+    // Force publish flag has to come early in diff stage
     const { forcePublish } = publishFlags(flags);
     const diff = await findDiff(config, forcePublish);
     const bumpObjects = await createBumpObject(diff, bumpArg);
