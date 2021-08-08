@@ -1,5 +1,6 @@
 {
   "include": ["src/**/*"],
+  "exclude": ["src/**/*.test.ts"],
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig.json to read more about this file */
 
@@ -69,7 +70,6 @@
     /* Advanced Options */
     "resolveJsonModule": true /* Include modules imported with '.json' extension */,
     "skipLibCheck": true /* Skip type checking of declaration files. */,
-    "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */,
-    "exclude": ["src/**/*.test.ts"]
+    "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */
   }
 }
