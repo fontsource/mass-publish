@@ -44,7 +44,11 @@ const gitRemoteAdd = async (
 ): Promise<void> => {
   // git remote add origin https://username:access-token@github.com/username/repo.git
   const publishURL = `https://${name}:${process.env.GITHUB_TOKEN}@${strippedURL}`;
-  await execa("git", ["remote", "add", "origin", publishURL]);
+  try {
+    await execa("git", ["remote", "add", "origin", publishURL]);
+  } catch {
+    // Git origin already exists. Continue
+  }
 };
 
 const gitPush = async (): Promise<void> => {
