@@ -10,19 +10,25 @@ const queue = new PQueue({ concurrency: 12 });
 
 const validate = async (item: BumpObject, bumpArg: string) => {
   let npmVersion: string | boolean;
+  const newItem = item;
+
   try {
     // Get latest version from NPM registry and compare if bumped version is greater than NPM
     npmVersion = await latestVersion(item.packageFile.name);
     if (semver.gt(item.bumpedVersion as string, npmVersion)) {
       return item;
     }
-  } catch {
-    // Assume package isn't published on NPM yet
-    return item;
+  } catch (error) {
+    // If package isn't published on NPM yet, revert bump
+    if (error.name === "PackageNotFoundError") {
+      newItem.bumpedVersion = newItem.packageFile.version;
+    }
+
+    return newItem;
   }
 
   // If failed, do not publish
-  const newItem = item;
+
   newItem.noPublish = true;
   if (bumpArg === "from-package") {
     return newItem;

@@ -38,7 +38,9 @@ describe("Bump check", () => {
   test("NPM unpublished", async () => {
     const mockedLatestVersion = mocked(latestVersion, false);
     // eslint-disable-next-line unicorn/no-useless-undefined
-    mockedLatestVersion.mockRejectedValue(undefined);
+    mockedLatestVersion.mockRejectedValue({
+      name: "PackageNotFoundError",
+    });
 
     const validList: BumpObject[] = [
       {
@@ -52,7 +54,7 @@ describe("Bump check", () => {
     expect(checkedList).toEqual(validList);
   });
 
-  test("Failed check", async () => {
+  test("Same version exists", async () => {
     const mockedLatestVersion = mocked(latestVersion, false);
     mockedLatestVersion.mockResolvedValue("1.0.1");
 
