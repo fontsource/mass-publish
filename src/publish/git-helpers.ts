@@ -3,7 +3,7 @@ import execa from "execa";
 import type { Config } from "../changed/changed";
 
 const gitAdd = async (): Promise<void> => {
-  await execa("git", ["add", "-all"]);
+  await execa("git", ["add", "--all"]);
 };
 
 const gitConfig = async (config: Config): Promise<void> => {
