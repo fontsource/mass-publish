@@ -1,5 +1,3 @@
-# UNDER DEVELOPMENT
-
 # mass-publish
 
 A barebones bulk NPM publisher.
