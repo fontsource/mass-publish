@@ -83,7 +83,7 @@ describe("Bump command", () => {
       chalk.bold.blue("Changed packages:"),
       chalk.magenta("test1: 1.0.0 --> 1.1.0"),
       chalk.magenta("test2: 1.1.0 --> 1.2.0"),
-      chalk.bold.green("Bump 2 packages?"),
+      chalk.bold.green("Bump 2 packages? y/n"),
       chalk.blue("Writing updates..."),
       chalk.green("Done."),
     ]);
@@ -99,7 +99,7 @@ describe("Bump command", () => {
       chalk.bold.green("Done."),
       chalk.bold.blue("Changed packages:"),
       chalk.magenta("test2: 1.1.0 --> 2.1.0"),
-      chalk.bold.green("Bump 1 packages?"),
+      chalk.bold.green("Bump 1 packages? y/n"),
       chalk.blue("Writing updates..."),
       chalk.green("Done."),
     ]);
@@ -135,7 +135,7 @@ describe("Bump command", () => {
       chalk.bold.blue("Changed packages:"),
       chalk.magenta("test1: 1.0.0 --> 5.12.35"),
       chalk.magenta("test2: 1.1.0 --> 5.12.35"),
-      chalk.bold.green("Bump 2 packages?"),
+      chalk.bold.green("Bump 2 packages? y/n"),
       chalk.blue("Writing updates..."),
       chalk.green("Done."),
     ]);

@@ -42,7 +42,7 @@ const bumpCliPrint = async (
       bumpObject => !bumpObject.noPublish
     );
     const input = await cli.confirm(
-      chalk.bold.green(`Bump ${publishObjects.length} packages?`)
+      chalk.bold.green(`Bump ${publishObjects.length} packages? y/n`)
     );
     if (!input) {
       throw new CLIError("Bump cancelled.");

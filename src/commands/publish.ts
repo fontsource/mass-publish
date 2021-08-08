@@ -5,22 +5,13 @@ import chalk from "chalk";
 import { bumpCliPrint, bumpWrite, createBumpObject } from "../bump/bump";
 import { readConfig, findDiff } from "../changed/changed";
 import { npmPublish, gitRun, publishChecks } from "../publish/publish";
-import {
-  changedFlags,
-  bumpFlags,
-  publishFlags,
-  isValidBumpArg,
-} from "../utils/utils";
+import { changedFlags, bumpFlags, isValidBumpArg } from "../utils/utils";
 
 export default class Publish extends Command {
   static description = "Publishes changed packages";
 
   static flags = {
     help: flags.help({ char: "h" }),
-    // Force publish all packages including those not changed --force-publish
-    "force-publish": flags.boolean({
-      description: "Force publish all packages even if no changes detected",
-    }),
     // Copied over from bump.ts
     // flag to skip checking with NPM registry on version number --no-verify
     "no-verify": flags.boolean({
@@ -29,6 +20,10 @@ export default class Publish extends Command {
     // flag to skip confirmation to write package bumps --yes
     yes: flags.boolean({
       description: "Skip confirmation to write bumped versions to package.json",
+    }),
+    // Force publish all packages including those not changed --force-publish
+    "force-publish": flags.boolean({
+      description: "Force publish all packages even if no changes detected",
     }),
 
     // Copied over from changed.ts
@@ -62,11 +57,11 @@ export default class Publish extends Command {
     config = changedFlags(flags, config);
 
     // Force publish flag has to come early in diff stage
-    const { forcePublish } = publishFlags(flags);
-    const diff = await findDiff(config, forcePublish);
+    const bumpFlagVars = bumpFlags(flags);
+    const diff = await findDiff(config, bumpFlagVars.forcePublish);
     const bumpObjects = await createBumpObject(diff, bumpArg);
 
-    const bumpFlagVars = bumpFlags(flags);
+    // Print all details
     const checkedObjects = await bumpCliPrint(
       bumpFlagVars,
       bumpObjects,

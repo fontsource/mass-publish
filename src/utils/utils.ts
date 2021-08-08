@@ -1,4 +1,4 @@
-import { bumpFlags, changedFlags, publishFlags } from "./flag-config";
+import { bumpFlags, changedFlags } from "./flag-config";
 import log from "./log";
 import { pathToPackage } from "./path-to-package";
 
@@ -15,14 +15,11 @@ import type {
   FlagsBump,
   FlagsBumpReturn,
   FlagsChanged,
-  FlagsPublish,
-  FlagsPublishReturn,
 } from "./interfaces/flags";
 
 export {
   bumpFlags,
   changedFlags,
-  publishFlags,
   log,
   pathToPackage,
   isPackageJson,
@@ -36,6 +33,4 @@ export type {
   FlagsBump,
   FlagsBumpReturn,
   FlagsChanged,
-  FlagsPublish,
-  FlagsPublishReturn,
 };

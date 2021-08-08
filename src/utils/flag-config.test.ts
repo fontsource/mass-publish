@@ -1,4 +1,4 @@
-import { changedFlags, bumpFlags, publishFlags } from "./flag-config";
+import { changedFlags, bumpFlags } from "./flag-config";
 
 describe("Flag config", () => {
   const noFlags = {};
@@ -33,15 +33,16 @@ describe("Flag config", () => {
 
   test("Bump", () => {
     const newFlagsNoChange = bumpFlags(noFlags);
-    expect(newFlagsNoChange).toEqual({ noVerify: false, skipPrompt: false });
+    expect(newFlagsNoChange).toEqual({
+      noVerify: false,
+      skipPrompt: false,
+      forcePublish: false,
+    });
     const newFlagsChange = bumpFlags(allFlags);
-    expect(newFlagsChange).toEqual({ noVerify: true, skipPrompt: true });
-  });
-
-  test("Publish", () => {
-    const newFlagsNoChange = publishFlags(noFlags);
-    expect(newFlagsNoChange).toEqual({ forcePublish: false });
-    const newFlagsChange = publishFlags(allFlags);
-    expect(newFlagsChange).toEqual({ forcePublish: true });
+    expect(newFlagsChange).toEqual({
+      noVerify: true,
+      skipPrompt: true,
+      forcePublish: true,
+    });
   });
 });

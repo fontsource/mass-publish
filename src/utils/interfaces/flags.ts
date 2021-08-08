@@ -13,17 +13,11 @@ export interface FlagsChanged extends Flags {
 export interface FlagsBump extends Flags {
   "no-verify": boolean;
   yes: boolean;
+  "force-publish": boolean;
 }
 
 export interface FlagsBumpReturn {
   noVerify: boolean;
   skipPrompt: boolean;
-}
-
-export interface FlagsPublish extends Flags {
-  "force-publish": boolean;
-}
-
-export interface FlagsPublishReturn {
   forcePublish: boolean;
 }

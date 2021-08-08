@@ -21,6 +21,10 @@ export default class Bump extends Command {
     yes: flags.boolean({
       description: "Skip confirmation to write bumped versions to package.json",
     }),
+    // Force publish all packages including those not changed --force-publish
+    "force-publish": flags.boolean({
+      description: "Force publish all packages even if no changes detected",
+    }),
 
     // Copied over from changed.ts
     // Overrides commitTo value in config --commit-to=
@@ -53,10 +57,10 @@ export default class Bump extends Command {
     // If there are any flags, override respective config
     config = changedFlags(flags, config);
 
-    const diff = await findDiff(config);
+    const bumpFlagVars = bumpFlags(flags);
+    const diff = await findDiff(config, bumpFlagVars.forcePublish);
     const bumpObjects = await createBumpObject(diff, bumpArg);
 
-    const bumpFlagVars = bumpFlags(flags);
     const checkedObjects = await bumpCliPrint(
       bumpFlagVars,
       bumpObjects,
