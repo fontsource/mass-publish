@@ -1,6 +1,6 @@
 {
   "name": "mass-publish",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A barebones NPM bulk publisher.",
   "bin": {
     "mass-publish": "./bin/run"
@@ -13,7 +13,7 @@
   "scripts": {
     "postpack": "rimraf oclif.manifest.json",
     "posttest": "eslint . --ext .ts --config .eslintrc",
-    "prepack": "rimraf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "prepack": "yarn test && rimraf lib && tsc -b && oclif-dev manifest && oclif-dev readme ",
     "command": "./bin/run",
     "version": "oclif-dev readme && git add README.md",
     "test": "jest"
@@ -47,7 +47,7 @@
     "execa": "^5.1.1",
     "jsonfile": "^6.1.0",
     "latest-version": "^5.1.0",
-    "libnpmpublish": "^4.0.2",
+    "libnpmpublish": "4.0.0",
     "p-queue": "6",
     "pacote": "^11.3.5",
     "parse-git-config": "^3.0.0",
@@ -58,6 +58,7 @@
     "@oclif/dev-cli": "^1.26.0",
     "@types/jest": "^26.0.24",
     "@types/jsonfile": "^6.0.1",
+    "@types/libnpmpublish": "^4.0.0",
     "@types/node": "^16.4.12",
     "@types/pacote": "^11.1.1",
     "@types/parse-git-config": "^3.0.1",

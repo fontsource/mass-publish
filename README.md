@@ -42,7 +42,7 @@ Reference: [`config.ts`](https://github.com/fontsource/mass-publish/blob/main/sr
 These can be saved in a `.env` file or through your CI modifying `process.env` as secrets.
 
 ```js
-NPM_AUTH_TOKEN= //https://docs.npmjs.com/creating-and-viewing-access-tokens
+NPM_TOKEN= //https://docs.npmjs.com/creating-and-viewing-access-tokens
 GITHUB_TOKEN= //https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token
 ```
 

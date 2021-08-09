@@ -14,8 +14,8 @@ const publishChecks = async (config: Config): Promise<void> => {
       "Missing Github Personal Access Token (GITHUB_TOKEN) in environment! "
     );
   }
-  if (!process.env.NPM_AUTH_TOKEN) {
-    throw new CLIError("Missing NPM access token! (NPM_AUTH_TOKEN)");
+  if (!process.env.NPM_TOKEN) {
+    throw new CLIError("Missing NPM access token! (NPM_TOKEN)");
   }
 
   // Configure Git if specified

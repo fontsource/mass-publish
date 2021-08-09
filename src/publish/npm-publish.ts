@@ -3,6 +3,7 @@ import chalk from "chalk";
 import { cli } from "cli-ux";
 import { publish } from "libnpmpublish";
 import { manifest, tarball } from "pacote";
+import path from "path";
 import PQueue from "p-queue";
 
 import type { BumpObject } from "../bump/bump";
@@ -10,15 +11,13 @@ import type { BumpObject } from "../bump/bump";
 const queue = new PQueue({ concurrency: 6 });
 
 const packPublish = async (bumpObject: BumpObject) => {
-  const path = bumpObject.packagePath;
-
-  cli.action.start(
-    chalk.bold.blue(`Publishing ${bumpObject.packageFile.name}...`)
-  );
-  const packageManifest = await manifest(path);
-  const tarData = await tarball(path);
+  const packagePath = path.join(process.cwd(), bumpObject.packagePath);
   const npmVersion = `${bumpObject.packageFile.name}@${bumpObject.bumpedVersion}`;
-  const token = process.env.NPM_AUTH_TOKEN;
+
+  cli.action.start(chalk.bold.blue(`Publishing ${npmVersion}...`));
+  const packageManifest = await manifest(packagePath);
+  const tarData = await tarball(packagePath);
+  const token = process.env.NPM_TOKEN;
 
   try {
     await publish(packageManifest, tarData, {
@@ -26,12 +25,10 @@ const packPublish = async (bumpObject: BumpObject) => {
       npmVersion,
       token,
     });
-    cli.action.stop(
-      chalk.bold.green(`Successfully published ${bumpObject.packageFile.name}!`)
-    );
+    cli.action.stop(chalk.bold.green(`Successfully published ${npmVersion}!`));
   } catch (error) {
     throw new CLIError(
-      `Encountered an error publishing ${bumpObject.packageFile.name}! ${error}`
+      `Encountered an error publishing ${bumpObject.packageFile.name}!\n${error}`
     );
   }
 };
