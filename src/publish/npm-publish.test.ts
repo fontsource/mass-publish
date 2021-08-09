@@ -8,6 +8,7 @@ import { createBumpObject } from "../bump/bump";
 import { exampleConfig3 } from "../utils/helpers/test-configs";
 import { npmPublish } from "./npm-publish";
 
+import type { Response } from "node-fetch";
 import type { BumpObject } from "../bump/bump";
 
 jest.mock("dotenv");
@@ -25,7 +26,7 @@ describe("NPM publish function", () => {
     results = [];
     process.env = { ...OLD_ENV };
 
-    mockedPublish.mockResolvedValue();
+    mockedPublish.mockResolvedValue({} as Response);
 
     diff = await findDiff(exampleConfig3);
     bumpObjects = await createBumpObject(diff, "patch");
@@ -51,21 +52,21 @@ describe("NPM publish function", () => {
   });
 
   test("Success", async () => {
-    process.env.NPM_AUTH_TOKEN = "test";
+    process.env.NPM_TOKEN = "test";
 
     await expect(npmPublish(bumpObjects)).resolves.not.toThrow();
     expect(results).toEqual([
-      chalk.bold.blue("Publishing test2..."),
-      chalk.bold.green("Successfully published test2!"),
+      chalk.bold.blue("Publishing test2@1.1.1..."),
+      chalk.bold.green("Successfully published test2@1.1.1!"),
     ]);
   });
 
   test("Failed publish", async () => {
-    process.env.NPM_AUTH_TOKEN = "test";
+    process.env.NPM_TOKEN = "test";
     mockedPublish.mockRejectedValue("test-fail");
 
     await expect(npmPublish(bumpObjects)).rejects.toThrow(
-      "Encountered an error publishing test2! test-fail"
+      "Encountered an error publishing test2!\ntest-fail"
     );
   });
 });
