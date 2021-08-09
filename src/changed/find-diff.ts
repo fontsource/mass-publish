@@ -56,6 +56,11 @@ const findDiff = async (
           match = false;
         }
       }
+
+      // Ignore package.json
+      if (path.endsWith("package.json")) {
+        match = false;
+      }
     }
 
     return match;
@@ -80,7 +85,7 @@ const findDiff = async (
 
   // Multiple changed files in same dir would produce multiple duplicate dirPaths
   const noDuplicatesDirPaths = [...new Set(dirPaths)];
-  return noDuplicatesDirPaths; // ?
+  return noDuplicatesDirPaths;
 };
 
 export { findDiff };
