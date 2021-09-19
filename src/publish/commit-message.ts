@@ -13,4 +13,14 @@ const newCommitMessage = (
   return commitMessage;
 };
 
-export { newCommitMessage };
+const commitHashUpdateMessage = (config: Config): string => {
+  let message = "chore: update packages";
+  const { updateMessage } = config;
+  if (updateMessage) {
+    message = updateMessage;
+  }
+
+  return message;
+};
+
+export { newCommitMessage, commitHashUpdateMessage };

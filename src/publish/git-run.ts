@@ -1,4 +1,4 @@
-import { newCommitMessage } from "./commit-message";
+import { commitHashUpdateMessage, newCommitMessage } from "./commit-message";
 import { getGitConfig } from "./git-config";
 import {
   gitAdd,
@@ -19,14 +19,16 @@ const gitRun = async (
   // Ensure all variables are ready before running git commands
   const { name } = await getGitConfig(config);
 
-  // Update mass-publish.json with new commitFrom hash before pushing
-  await updateConfig(config);
-
   // Stage all files
   await gitAdd();
-  const commitMessage = newCommitMessage(config, bumpObjects);
 
   // Commit
+  const updateMessage = commitHashUpdateMessage(config);
+  await gitCommit(updateMessage);
+
+  // Update mass-publish.json with new commitFrom hash
+  await updateConfig(config);
+  const commitMessage = newCommitMessage(config, bumpObjects);
   await gitCommit(commitMessage);
 
   // Push prep

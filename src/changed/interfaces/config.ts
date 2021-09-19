@@ -7,6 +7,7 @@ export interface Config {
   packages: string[];
   ignoreExtension?: string[];
   commitMessage: string;
+  updateMessage?: string;
   git?: Git;
   commitFrom: string;
   commitTo?: string;
