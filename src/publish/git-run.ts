@@ -28,6 +28,9 @@ const gitRun = async (
 
   // Update mass-publish.json with new commitFrom hash
   await updateConfig(config);
+  // Stage files again
+  await gitAdd();
+
   const commitMessage = newCommitMessage(config, bumpObjects);
   await gitCommit(commitMessage);
 
