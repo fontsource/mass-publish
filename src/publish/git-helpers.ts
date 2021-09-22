@@ -24,7 +24,7 @@ const gitConfig = async (config: Config): Promise<void> => {
 };
 
 const gitCommit = async (message: string): Promise<void> => {
-  await execa("git", ["commit", "-m", `"${message}"`]);
+  await execa("git", ["commit", "-m", message]);
 };
 
 const gitRemoteUrl = async (): Promise<string> => {

@@ -14,7 +14,7 @@ const newCommitMessage = (
 };
 
 const commitHashUpdateMessage = (config: Config): string => {
-  let message = "chore: update packages";
+  let message = "chore(build): update packages";
   const { updateMessage } = config;
   if (updateMessage) {
     message = updateMessage;
