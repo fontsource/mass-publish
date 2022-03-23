@@ -60,4 +60,25 @@ describe("Find diff", () => {
     const files5 = await findDiff(exampleConfig5, true);
     expect(files5).toEqual(["test1", "test2"]);
   });
+
+  test("Find test package differences #6 - test 3 remove multi packages", () => {
+    const exampleConfig = {
+      packages: [
+        "src/changed/fixtures/test1",
+        "src/changed/fixtures/test2",
+        "src/changed/fixtures/test3",
+      ],
+      ignoreExtension: [],
+      commitMessage: "chore: release new versions",
+      commitFrom: "5059b64905315d7fdc2dcdfcdee51d052945ddf2",
+      commitTo: "f1ac53d7aa55ad07fe7df61b5ec810edc49e9fba",
+    };
+
+    return findDiff(exampleConfig).then(files => {
+      return expect(files).toEqual([
+        path.join("src", "changed", "fixtures", "test1"),
+        path.join("src", "changed", "fixtures", "test2"),
+        path.join("src", "changed", "fixtures", "test3"),
+      ]);
+    });
 });
