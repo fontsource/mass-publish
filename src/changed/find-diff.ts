@@ -9,25 +9,12 @@ const findDiff = async (
   forcePublish = false
 ): Promise<string[]> => {
   if (forcePublish) {
-    // Find all directories in packages specified directories
-    const dirs = [];
-    for (const packageDir of packages) {
-      const packagesToUpdate = fs.readdir(
-        path.join(process.cwd(), packageDir),
-        { withFileTypes: true }
-      );
-      dirs.push(packagesToUpdate);
-    }
+    const stream = await execa("git", ["rev-list", "--max-parents=0", "HEAD"]);
 
-    // Convert Promise<string[]>[] to string[]
-    const diff = await Promise.all(dirs);
-    const flattenedDiff = diff
-      .flat()
-      // Ignore single files only show directories
-      .filter(dirent => dirent.isDirectory())
-      .map(dirent => dirent.name);
-
-    return flattenedDiff;
+    // eslint-disable-next-line no-param-reassign
+    commitFrom = stream.stdout;
+    // eslint-disable-next-line no-param-reassign
+    commitTo = "HEAD";
   }
   // Diffs the two commmits
   const files = await execa("git", [

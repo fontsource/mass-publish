@@ -51,16 +51,6 @@ describe("Find diff", () => {
     });
   });
 
-  test("forcepublish flag", async () => {
-    // Has random files that needs to be ignored
-    const files1 = await findDiff(exampleConfig1, true);
-    expect(files1).toEqual(["subdir1"]);
-
-    // Only directories
-    const files5 = await findDiff(exampleConfig5, true);
-    expect(files5).toEqual(["test1", "test2"]);
-  });
-
   test("Find test package differences #6 - test 3 remove multi packages", () => {
     const exampleConfig = {
       packages: [
@@ -81,4 +71,38 @@ describe("Find diff", () => {
         path.join("src", "changed", "fixtures", "test3"),
       ]);
     });
+  });
+
+  test("Force publish flag", async () => {
+    const exampleConfig = {
+      packages: [
+        "src/changed/fixtures/test1",
+        "src/changed/fixtures/test2",
+        "src/changed/fixtures/test3",
+      ],
+      ignoreExtension: [],
+      commitMessage: "chore: release new versions",
+      commitFrom: "5059b64905315d7fdc2dcdfcdee51d052945ddf2",
+      commitTo: "f1ac53d7aa55ad07fe7df61b5ec810edc49e9fba",
+    };
+    // Has random files that needs to be ignored
+    const files1 = await findDiff(exampleConfig, true);
+    expect(files1).toEqual([
+      path.join("src", "changed", "fixtures", "test1"),
+      path.join("src", "changed", "fixtures", "test2"),
+    ]);
+
+    const files2 = await findDiff(exampleConfig2, true);
+    expect(files1).toEqual([
+      path.join("src", "changed", "fixtures", "test1"),
+      path.join("src", "changed", "fixtures", "test2"),
+    ]);
+
+    // Only directories
+    const files5 = await findDiff(exampleConfig5, true);
+    expect(files5).toEqual([
+      path.join("src", "changed", "fixtures", "test1"),
+      path.join("src", "changed", "fixtures", "test2"),
+    ]);
+  });
 });
