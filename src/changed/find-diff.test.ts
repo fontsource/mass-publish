@@ -93,7 +93,7 @@ describe("Find diff", () => {
     ]);
 
     const files2 = await findDiff(exampleConfig2, true);
-    expect(files1).toEqual([
+    expect(files2).toEqual([
       path.join("src", "changed", "fixtures", "test1"),
       path.join("src", "changed", "fixtures", "test2"),
     ]);
