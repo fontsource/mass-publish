@@ -1,6 +1,6 @@
 {
   "name": "mass-publish",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A barebones NPM bulk publisher.",
   "bin": {
     "mass-publish": "./bin/run"
