@@ -70,7 +70,7 @@ export default class Publish extends Command {
     await bumpWrite(checkedObjects);
 
     await publishChecks(config);
-    await gitRun(config, checkedObjects);
+    await gitRun(config, checkedObjects, bumpArg);
     await npmPublish(checkedObjects);
     this.log(chalk.green("Successfully published all packages!"));
   }

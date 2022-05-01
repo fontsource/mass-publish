@@ -14,17 +14,21 @@ import type { BumpObject } from "../bump/bump";
 
 const gitRun = async (
   config: Config,
-  bumpObjects: BumpObject[]
+  bumpObjects: BumpObject[],
+  bumpArg: string
 ): Promise<void> => {
   // Ensure all variables are ready before running git commands
   const { name } = await getGitConfig(config);
 
-  // Stage all files
-  await gitAdd();
+  // Nothing to commit if no bumps are made
+  if (bumpArg !== "from-package") {
+    // Stage all files
+    await gitAdd();
 
-  // Commit
-  const updateMessage = commitHashUpdateMessage(config);
-  await gitCommit(updateMessage);
+    // Commit
+    const updateMessage = commitHashUpdateMessage(config);
+    await gitCommit(updateMessage);
+  }
 
   // Update mass-publish.json with new commitFrom hash
   await updateConfig(config);
