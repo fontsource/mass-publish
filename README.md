@@ -84,7 +84,7 @@ All previous flags from `mass-publish changed` can be also be used.
 
 ### publish
 
-`mass-publish publish patch|minor|major|1.0.0`
+`mass-publish publish patch|minor|major|from-package|1.0.0`
 
 Publishes all packages to NPM.
 
