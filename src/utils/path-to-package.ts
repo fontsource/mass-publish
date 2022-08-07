@@ -1,7 +1,7 @@
 /* eslint-disable consistent-return */
 /* eslint-disable array-callback-return */
 import chalk from "chalk";
-import jsonfile from "jsonfile";
+import fs from "node:fs";
 import path from "path";
 
 import log from "./log";
@@ -12,8 +12,10 @@ const pathToPackage = (dirArray: string[]): PackageJsonObject[] => {
   const packageJsons = dirArray.map(dirPath => {
     const packageJsonPath = path.join(dirPath, "package.json");
     try {
-      const data: PackageJson = jsonfile.readFileSync(
-        path.join(process.cwd(), packageJsonPath)
+      const data: PackageJson = JSON.parse(
+        JSON.stringify(
+          fs.readFileSync(path.join(process.cwd(), packageJsonPath))
+        )
       );
       return data;
     } catch {

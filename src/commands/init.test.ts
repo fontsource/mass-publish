@@ -1,4 +1,4 @@
-import jsonfile from "jsonfile";
+import * as fs from "node:fs/promises"
 import Init from "./init";
 
 jest.setTimeout(50_000);
@@ -8,7 +8,7 @@ test("Init command", async () => {
     .spyOn(process.stdout, "write")
     .mockImplementation(val => results.push(String(val).trim()));
 
-  const writeFile = jest.spyOn(jsonfile, "writeFile").mockResolvedValue();
+  const writeFile = jest.spyOn(fs, "writeFile").mockResolvedValue();
 
   await expect(Init.run()).resolves.not.toThrow();
   expect(writeFile).toHaveBeenCalledTimes(1);

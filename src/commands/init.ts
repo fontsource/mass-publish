@@ -1,5 +1,6 @@
 import { Command, flags } from "@oclif/command";
-import jsonfile from "jsonfile";
+import * as fs from "node:fs/promises";
+import stringify from "json-stringify-pretty-compact";
 import path from "path";
 
 import { getHeadCommit } from "../publish/publish";
@@ -23,7 +24,7 @@ export default class Init extends Command {
       commitFrom: headCommit,
     };
     defaultConfig.commitFrom = headCommit;
-    await jsonfile.writeFile(filePath, defaultConfig);
+    await fs.writeFile(filePath, stringify(defaultConfig));
     this.log("mass-publish.json has been created.");
   }
 }

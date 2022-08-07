@@ -1,4 +1,5 @@
-import jsonfile from "jsonfile";
+import * as fs from "node:fs/promises";
+import stringify from "json-stringify-pretty-compact";
 import path from "path";
 
 import { BumpObject } from "./interfaces/bump-object";
@@ -8,9 +9,9 @@ const writeUpdate = async (item: BumpObject) => {
   if (item.bumpedVersion && !item.noPublish) {
     newPackageFile.version = item.bumpedVersion;
 
-    await jsonfile.writeFile(
+    await fs.writeFile(
       path.join(item.packagePath, "package.json"),
-      newPackageFile
+      stringify(newPackageFile)
     );
   }
 };

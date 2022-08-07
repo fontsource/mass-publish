@@ -1,5 +1,6 @@
 import execa from "execa";
-import jsonfile from "jsonfile";
+import * as fs from "node:fs/promises";
+import stringify from "json-stringify-pretty-compact";
 import path from "path";
 
 import type { Config } from "../changed/changed";
@@ -17,7 +18,7 @@ const updateConfig = async (config: Config): Promise<void> => {
   newConfig.commitFrom = headCommit;
 
   const configPath = path.join(process.cwd(), "mass-publish.json");
-  await jsonfile.writeFile(configPath, newConfig);
+  await fs.writeFile(configPath, stringify(newConfig));
 };
 
 export { getHeadCommit, updateConfig };

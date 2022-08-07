@@ -1,4 +1,4 @@
-import jsonfile from "jsonfile";
+import * as fs from "node:fs/promises"
 
 import { exampleConfig1 } from "../utils/helpers/test-configs";
 import { getHeadCommit, updateConfig } from "./update-config";
@@ -17,8 +17,8 @@ describe("Publish update config", () => {
 
   test("Update config", async () => {
     let input: Partial<Config> = {};
-    jest.spyOn(jsonfile, "writeFile").mockImplementation((_, val2) => {
-      input = val2;
+    jest.spyOn(fs, "writeFile").mockImplementation((_, val2) => {
+      input = JSON.parse(JSON.stringify(val2));
       return Promise.resolve();
     });
 

@@ -1,4 +1,4 @@
-import jsonfile from "jsonfile";
+import * as fs from "node:fs/promises"
 
 import { bumpWrite } from "./bump-write";
 
@@ -6,7 +6,7 @@ import type { BumpObject } from "./bump";
 
 describe("Bump write function", () => {
   test("Should not throw", async () => {
-    jest.spyOn(jsonfile, "writeFile").mockResolvedValue();
+    jest.spyOn(fs, "writeFile").mockResolvedValue();
 
     const bumpList: BumpObject[] = [
       {

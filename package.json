@@ -46,7 +46,7 @@
     "cli-ux": "^5.6.3",
     "dotenv": "^10.0.0",
     "execa": "^5.1.1",
-    "jsonfile": "^6.1.0",
+    "json-stringify-pretty-compact": "3",
     "latest-version": "^5.1.0",
     "libnpmpublish": "4.0.0",
     "p-queue": "6",
@@ -58,7 +58,6 @@
   "devDependencies": {
     "@oclif/dev-cli": "^1.26.0",
     "@types/jest": "^26.0.24",
-    "@types/jsonfile": "^6.0.1",
     "@types/libnpmpublish": "^4.0.0",
     "@types/node": "^16.4.12",
     "@types/pacote": "^11.1.1",
