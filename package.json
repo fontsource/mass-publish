@@ -12,7 +12,7 @@
   "license": "MIT",
   "scripts": {
     "postpack": "rimraf oclif.manifest.json",
-    "lint": "eslint . --ext .ts --config .eslintrc.json",
+    "lint": "eslint **/*.ts",
     "prepack": "rimraf lib && tsc -b && oclif-dev manifest && oclif-dev readme ",
     "command": "./bin/run",
     "version": "oclif-dev readme && git add README.md",
