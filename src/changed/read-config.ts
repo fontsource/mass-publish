@@ -1,4 +1,4 @@
-import * as fs from "node:fs/promises";
+import * as fs from "fs/promises";
 import path from "path";
 
 import type { Config } from "./interfaces/config";

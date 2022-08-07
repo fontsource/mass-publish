@@ -20,6 +20,7 @@ const validate = async (item: BumpObject, bumpArg: string) => {
     }
   } catch (error) {
     // If package isn't published on NPM yet, revert bump
+    // @ts-ignore
     if (error.name === "PackageNotFoundError") {
       newItem.bumpedVersion = newItem.packageFile.version;
     }

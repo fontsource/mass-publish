@@ -46,6 +46,7 @@
     // Affects oclif commands
     "no-shadow": "off",
     "@typescript-eslint/no-shadow": ["off"],
-    "@typescript-eslint/require-await": "off"
+    "@typescript-eslint/require-await": "off",
+    "@typescript-eslint/ban-ts-comment": "off"
   }
 }

@@ -1,4 +1,4 @@
-import * as fs from "node:fs/promises"
+import * as fs from "fs/promises"
 
 import { exampleConfig1 } from "../utils/helpers/test-configs";
 import { getHeadCommit, updateConfig } from "./update-config";

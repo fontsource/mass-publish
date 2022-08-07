@@ -1,5 +1,5 @@
 import { Command, flags } from "@oclif/command";
-import * as fs from "node:fs/promises";
+import * as fs from "fs/promises";
 import stringify from "json-stringify-pretty-compact";
 import path from "path";
 

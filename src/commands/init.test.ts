@@ -1,4 +1,4 @@
-import * as fs from "node:fs/promises"
+import * as fs from "fs/promises"
 import Init from "./init";
 
 jest.setTimeout(50_000);
