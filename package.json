@@ -28,6 +28,7 @@
 		"consola": "^2.15.3",
 		"dotenv": "^16.0.1",
 		"execa": "^6.1.0",
+		"json-stringify-pretty-compact": "^4.0.0",
 		"latest-version": "^7.0.0",
 		"libnpmpublish": "^6.0.4",
 		"p-queue": "^7.3.0",

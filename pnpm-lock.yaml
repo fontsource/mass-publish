@@ -15,6 +15,7 @@ specifiers:
   eslint: ^8.21.0
   execa: ^6.1.0
   fast-glob: ^3.2.11
+  json-stringify-pretty-compact: ^4.0.0
   latest-version: ^7.0.0
   libnpmpublish: ^6.0.4
   magic-string: ^0.26.2
@@ -37,6 +38,7 @@ dependencies:
   consola: 2.15.3
   dotenv: 16.0.1
   execa: 6.1.0
+  json-stringify-pretty-compact: 4.0.0
   latest-version: 7.0.0
   libnpmpublish: 6.0.4
   p-queue: 7.3.0
@@ -2663,6 +2665,10 @@ packages:
   /json-stable-stringify-without-jsonify/1.0.1:
     resolution: {integrity: sha512-Bdboy+l7tA3OGW6FjyFHWkP5LuByj1Tk33Ljyq0axyzdk9//JSi2u3fP1QSmd1KNwq6VOKYGlAu87CisVir6Pw==}
     dev: true
+
+  /json-stringify-pretty-compact/4.0.0:
+    resolution: {integrity: sha512-3CNZ2DnrpByG9Nqj6Xo8vqbjT4F6N+tb4Gb28ESAZjYZ5yqvmc56J+/kuIwkaAMOyblTQhUW7PxMkUb8Q36N3Q==}
+    dev: false
 
   /json5/1.0.1:
     resolution: {integrity: sha512-aKS4WQjPenRxiQsC93MNfjx+nbF4PAdYzmd/1JIj8HYzqfbu86beTuNgXDzPknWk0n0uARlyewZo4s++ES36Ow==}
