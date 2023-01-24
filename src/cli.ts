@@ -3,8 +3,12 @@ import consola from 'consola';
 import * as dotenv from 'dotenv';
 import colors from 'picocolors';
 
-import { version } from '../package.json';
+import { version as packageJsonVersion } from '../package.json';
+import { bump } from './bump';
+import { changed } from './changed';
 import { init } from './init';
+import { publish } from './publish';
+import { BumpFlags, ChangedFlags, PublishFlags } from './types';
 
 dotenv.config();
 
@@ -23,7 +27,15 @@ cli.command('changed', 'Runs git diff and lists all packages that have changes m
 	.option('--commit-to', 'Commit SHA to compare differences to')
 	.option('--commit-message', 'Change commit message')
 	.option('--ignore-extension', 'Ignore extensions')
-	.option('--packages', 'Package directory');
+	.option('--packages', 'Package directory')
+	.action(async (opts: ChangedFlags) => {
+		try {
+			await changed(opts);
+			consola.success(colors.green(colors.bold('Success')));
+		} catch (error) {
+			consola.error(error);
+		}
+	});
 
 
 cli.command('bump <version>', 'Bumps the version of all changed packages.')
@@ -35,7 +47,15 @@ cli.command('bump <version>', 'Bumps the version of all changed packages.')
 	.option('--commit-to', 'Commit SHA to compare differences to')
 	.option('--commit-message', 'Change commit message')
 	.option('--ignore-extension', 'Ignore extensions')
-	.option('--packages', 'Package directory');
+	.option('--packages', 'Package directory')
+	.action(async (version: string, opts: BumpFlags) => {
+		try {
+			await bump(version, opts);
+			consola.success(colors.green(colors.bold('Successfully bumped x packages.')));
+		} catch (error) {
+			consola.error(error);
+		}
+	});
 
 cli.command('publish <version>', 'Publishes all packages to NPM.')
 	// Carry over bump and changed command options
@@ -46,9 +66,17 @@ cli.command('publish <version>', 'Publishes all packages to NPM.')
 	.option('--commit-to', 'Commit SHA to compare differences to')
 	.option('--commit-message', 'Change commit message')
 	.option('--ignore-extension', 'Ignore extensions')
-	.option('--packages', 'Package directory');
+	.option('--packages', 'Package directory')
+	.action(async (opts: PublishFlags) => {
+		try {
+			await publish(opts);
+			consola.success(colors.green(colors.bold('Successfully published all x packages.')));
+		} catch (error) {
+			consola.error(error);
+		}
+	});
 
 cli.help();
-cli.version(version);
+cli.version(packageJsonVersion);
 
 cli.parse();

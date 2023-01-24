@@ -7,10 +7,12 @@ specifiers:
   '@types/node': ^18.6.4
   '@types/pacote': ^11.1.5
   '@types/parse-git-config': ^3.0.1
+  '@types/prompts': ^2.0.14
   '@types/semver': ^7.3.10
   c8: ^7.12.0
   cac: ^6.7.12
   consola: ^2.15.3
+  defu: ^6.1.0
   dotenv: ^16.0.1
   eslint: ^8.21.0
   execa: ^6.1.0
@@ -26,6 +28,7 @@ specifiers:
   picocolors: ^1.0.0
   pkgroll: ^1.4.0
   prettier: ^2.7.1
+  prompts: ^2.4.2
   rimraf: ^3.0.2
   semver: ^7.3.7
   tsx: ^3.8.0
@@ -36,6 +39,7 @@ dependencies:
   '@npmcli/package-json': 2.0.0
   cac: 6.7.12
   consola: 2.15.3
+  defu: 6.1.0
   dotenv: 16.0.1
   execa: 6.1.0
   json-stringify-pretty-compact: 4.0.0
@@ -46,6 +50,7 @@ dependencies:
   parse-git-config: 3.0.0
   pathe: 0.3.3
   picocolors: 1.0.0
+  prompts: 2.4.2
   semver: 7.3.7
 
 devDependencies:
@@ -54,6 +59,7 @@ devDependencies:
   '@types/node': 18.6.4
   '@types/pacote': 11.1.5
   '@types/parse-git-config': 3.0.1
+  '@types/prompts': 2.0.14
   '@types/semver': 7.3.10
   c8: 7.12.0
   eslint: 8.21.0
@@ -577,6 +583,12 @@ packages:
 
   /@types/parse-git-config/3.0.1:
     resolution: {integrity: sha512-cBVLXlpIpP23p+jQm8d2TrTfxyub3aiqfqgd0TWRnMqwCJMskYiveNJT11YwN+gbo3+0ZFFmtaepKzN7pxExlA==}
+    dev: true
+
+  /@types/prompts/2.0.14:
+    resolution: {integrity: sha512-HZBd99fKxRWpYCErtm2/yxUZv6/PBI9J7N4TNFffl5JbrYMHBwF25DjQGTW3b3jmXq+9P6/8fCIb2ee57BFfYA==}
+    dependencies:
+      '@types/node': 18.6.4
     dev: true
 
   /@types/resolve/1.17.1:
@@ -1235,6 +1247,10 @@ packages:
       has-property-descriptors: 1.0.0
       object-keys: 1.1.1
     dev: true
+
+  /defu/6.1.0:
+    resolution: {integrity: sha512-pOFYRTIhoKujrmbTRhcW5lYQLBXw/dlTwfI8IguF1QCDJOcJzNH1w+YFjxqy6BAuJrClTy6MUE8q+oKJ2FLsIw==}
+    dev: false
 
   /delayed-stream/1.0.0:
     resolution: {integrity: sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==}
@@ -2701,6 +2717,11 @@ packages:
       json-buffer: 3.0.1
     dev: false
 
+  /kleur/3.0.3:
+    resolution: {integrity: sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==}
+    engines: {node: '>=6'}
+    dev: false
+
   /language-subtag-registry/0.3.22:
     resolution: {integrity: sha512-tN0MCzyWnoz/4nHS6uxdlFWoUZT7ABptwKPQ52Ea7URk6vll88bWBVhodtnlfEuCcKWNGoc+uGbw1cwa9IKh/w==}
     dev: true
@@ -3498,6 +3519,14 @@ packages:
       retry: 0.12.0
     dev: false
 
+  /prompts/2.4.2:
+    resolution: {integrity: sha512-NxNv/kLguCA7p3jE8oL2aEBsrJWgAakBpgmgK6lpPWV+WuOmY6r2/zbAVnP+T8bQlA0nzHXSJSJW0Hq7ylaD2Q==}
+    engines: {node: '>= 6'}
+    dependencies:
+      kleur: 3.0.3
+      sisteransi: 1.0.5
+    dev: false
+
   /prop-types/15.8.1:
     resolution: {integrity: sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==}
     dependencies:
@@ -3756,6 +3785,10 @@ packages:
 
   /signal-exit/3.0.7:
     resolution: {integrity: sha512-wnD2ZE+l+SPC/uoS0vXeE9L1+0wuaMqKlfz9AMUo38JsyLSBWSFcHR1Rri62LZc12vLr1gb3jl7iwQhgwpAbGQ==}
+
+  /sisteransi/1.0.5:
+    resolution: {integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==}
+    dev: false
 
   /slash/3.0.0:
     resolution: {integrity: sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==}
